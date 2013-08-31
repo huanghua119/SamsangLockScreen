@@ -1,0 +1,32 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <!-- Size of clock font in LockScreen on Unsecure unlock screen. -->
+    <dimen name="keyguard_lockscreen_clock_font_size">80dip</dimen>
+
+    <!-- Size of status line font on Unsecure unlock LockScreen. -->
+    <dimen name="keyguard_lockscreen_status_line_font_size">14dip</dimen>
+
+    <!-- Size of right margin on Unsecure unlock LockScreen -->
+    <dimen name="keyguard_lockscreen_status_line_font_right_margin">42dip</dimen>
+
+    <!-- Size of top margin on Clock font to edge on unlock LockScreen -->
+    <dimen name="keyguard_lockscreen_status_line_clockfont_top_margin">22dip</dimen>
+
+    <!-- Size of top margin on Clock font to edge on unlock LockScreen -->
+    <dimen name="keyguard_lockscreen_status_line_clockfont_bottom_margin">12dip</dimen>
+
+    <!-- Padding on left margin of PIN text entry field to center it when del button is showing -->
+    <dimen name="keyguard_lockscreen_pin_margin_left">40dip</dimen>
+    <dimen name="keyguard_lockscreen_timelayout_margin">16dip</dimen>
+    <dimen name="keyguard_lockscreen_logo_textsize">30sp</dimen>
+    <dimen name="keyguard_lockscreen_logo_textsize_min">16sp</dimen>
+    <dimen name="keyguard_lockscreen_logo_textsize_delta">5sp</dimen>
+
+    <dimen name="lockscreen_color_icon_size">34dip</dimen>
+    <dimen name="lockscreen_color_icon_marger">2dip</dimen>
+    <dimen name="lockscreen_color_icon_marger_bottom">2dip</dimen>
+
+</resources>

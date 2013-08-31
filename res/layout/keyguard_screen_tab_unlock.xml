@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:id="@+id/waterlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent" >
+
+        <com.huanghua.rs.FallView
+            android:id="@+id/fall_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </com.huanghua.rs.FallView>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/timeframelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent" >
+
+        <ImageView
+            android:id="@+id/timeframe_bg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:src="@drawable/keyguard_lockscreen_time_bg"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/timelayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_marginLeft="@dimen/keyguard_lockscreen_timelayout_margin"
+            android:layout_marginRight="@dimen/keyguard_lockscreen_timelayout_margin"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/logo"
+                android:layout_width="match_parent"
+                android:layout_height="60dip"
+                android:layout_marginTop="31dip"
+                android:background="@android:color/black"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@android:color/white" />
+
+            <com.huanghua.samsanglockscreen.DigitalClock
+                android:id="@+id/time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dip" >
+
+                <ImageView
+                    android:id="@+id/ic_time_hour1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left" />
+
+                <ImageView
+                    android:id="@+id/ic_time_hour2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_toRightOf="@id/ic_time_hour1" />
+
+                <ImageView
+                    android:id="@+id/ic_time_dot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_toRightOf="@id/ic_time_hour2"
+                    android:src="@drawable/keyguard_lockscreen_time_dot" />
+
+                <ImageView
+                    android:id="@+id/ic_time_minute1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_toRightOf="@id/ic_time_dot" />
+
+                <ImageView
+                    android:id="@+id/ic_time_minute2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_toRightOf="@id/ic_time_minute1" />
+
+                <ImageView
+                    android:id="@+id/ic_time_ampm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_toRightOf="@id/ic_time_minute2" />
+            </com.huanghua.samsanglockscreen.DigitalClock>
+
+            <LinearLayout
+                android:id="@+id/datelayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/time"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dip"
+                    android:shadowColor="#e6000000"
+                    android:shadowDx="1.0"
+                    android:shadowDy="1.0"
+                    android:shadowRadius="1.0"
+                    android:textColor="@color/lockscreen_clock_background"
+                    android:textSize="16dip" />
+
+                <TextView
+                    android:id="@+id/alarm_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dip"
+                    android:layout_marginTop="2dip"
+                    android:layout_toRightOf="@id/date"
+                    android:drawablePadding="4dip"
+                    android:shadowColor="#e6000000"
+                    android:shadowDx="1.0"
+                    android:shadowDy="1.0"
+                    android:shadowRadius="1.0"
+                    android:textColor="@color/lockscreen_clock_background"
+                    android:textSize="16dip" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/eventlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dip"
+                android:orientation="horizontal" >
+
+                <com.huanghua.samsanglockscreen.LockDigitalClock
+                    android:id="@+id/event_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <!--
+            Because we can't have multi-tone fonts, we render two TextViews, one on
+            top of the other. Hence the redundant layout...
+                    -->
+
+                    <TextView
+                        android:id="@+id/timeDisplayBackground"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="none"
+                        android:singleLine="true"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/lockscreen_clock_background"
+                        android:textSize="26dip" />
+
+                    <TextView
+                        android:id="@+id/timeDisplayForeground"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@id/timeDisplayBackground"
+                        android:layout_alignTop="@id/timeDisplayBackground"
+                        android:ellipsize="none"
+                        android:singleLine="true"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/lockscreen_clock_foreground"
+                        android:textSize="26dip" />
+
+                    <TextView
+                        android:id="@+id/am_pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/timeDisplayForeground"
+                        android:layout_marginLeft="2dip"
+                        android:layout_marginTop="12dip"
+                        android:layout_toRightOf="@id/timeDisplayForeground"
+                        android:ellipsize="none"
+                        android:singleLine="true"
+                        android:textColor="@color/lockscreen_clock_foreground"
+                        android:textSize="14dip" />
+                </com.huanghua.samsanglockscreen.LockDigitalClock>
+
+                <TextView
+                    android:id="@+id/event_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dip"
+                    android:layout_marginTop="12dip"
+                    android:layout_toRightOf="@id/event_time"
+                    android:shadowColor="#e6000000"
+                    android:shadowDx="1.0"
+                    android:shadowDy="1.0"
+                    android:shadowRadius="1.0"
+                    android:textColor="@color/lockscreen_clock_background"
+                    android:textSize="14dip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/event_missedphone_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/keyguard_lockscreen_event_bg"
+                android:orientation="vertical"
+                android:visibility="gone" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dip"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:id="@+id/event_ic_missedphone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="11dip"
+                        android:src="@drawable/keyguard_lockscreen_event_missed_call" />
+
+                    <TextView
+                        android:id="@+id/event_missedphone_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dip"
+                        android:layout_marginTop="7dip"
+                        android:layout_toRightOf="@id/event_ic_missedphone"
+                        android:shadowColor="#ffe6e6e6"
+                        android:shadowDx="1.0"
+                        android:shadowDy="1.0"
+                        android:shadowRadius="1.0"
+                        android:text="@string/lock_call"
+                        android:textColor="#ff000000"
+                        android:textSize="22dip" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/event_missedphone_body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="58dip"
+                    android:layout_marginRight="18dip"
+                    android:ellipsize="none"
+                    android:shadowColor="#ffe6e6e6"
+                    android:shadowDx="1.0"
+                    android:shadowDy="1.0"
+                    android:shadowRadius="1.0"
+                    android:singleLine="true"
+                    android:textColor="#e6000000"
+                    android:textSize="16dip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/event_missedsms_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:background="@drawable/keyguard_lockscreen_event_bg"
+                android:orientation="vertical"
+                android:visibility="gone" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dip"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:id="@+id/event_ic_missedsms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="13dip"
+                        android:src="@drawable/keyguard_lockscreen_event_missed_sms" />
+
+                    <TextView
+                        android:id="@+id/event_missedsms_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dip"
+                        android:layout_marginTop="7dip"
+                        android:layout_toRightOf="@id/event_ic_missedsms"
+                        android:shadowColor="#ffe6e6e6"
+                        android:shadowDx="1.0"
+                        android:shadowDy="1.0"
+                        android:shadowRadius="1.0"
+                        android:text="@string/lock_sms"
+                        android:textColor="#ff000000"
+                        android:textSize="22dip" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/event_missedsms_body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="58dip"
+                    android:layout_marginRight="18dip"
+                    android:ellipsize="none"
+                    android:shadowColor="#ffe6e6e6"
+                    android:shadowDx="1.0"
+                    android:shadowDy="1.0"
+                    android:shadowRadius="1.0"
+                    android:singleLine="true"
+                    android:textColor="#e6000000"
+                    android:textSize="16dip" />
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/status1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timeframelayout"
+        android:layout_marginTop="2dip"
+        android:drawablePadding="4dip"
+        android:gravity="center_horizontal"
+        android:shadowColor="#e6000000"
+        android:shadowDx="1.0"
+        android:shadowDy="1.0"
+        android:shadowRadius="1.0"
+        android:textColor="@color/lockscreen_clock_background"
+        android:textSize="16dip" />
+
+    <ImageView
+        android:id="@+id/flare_shadow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="center"
+        android:src="@drawable/keyguard_flare_shadow"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/unlock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="40dip"
+        android:gravity="center"
+        android:shadowColor="#e6000000"
+        android:shadowDx="1.0"
+        android:shadowDy="1.0"
+        android:shadowRadius="1.0"
+        android:text="@string/lock_state_tip"
+        android:textColor="#ffe6e6e6"
+        android:textSize="16dip" />
+
+    <LinearLayout
+        android:id="@+id/carrierlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dip"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/carrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dip"
+            android:drawablePadding="2dip"
+            android:ellipsize="marquee"
+            android:gravity="center_horizontal|center_vertical"
+            android:shadowColor="#ff000000"
+            android:shadowDx="1.0"
+            android:shadowDy="1.0"
+            android:shadowRadius="1.0"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#ffebebeb"
+            android:textSize="@dimen/keyguard_lockscreen_status_line_font_size" />
+
+        <TextView
+            android:id="@+id/carrierDivider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dip"
+            android:drawablePadding="2dip"
+            android:gravity="center_horizontal|center_vertical"
+            android:shadowColor="#ff000000"
+            android:shadowDx="1.0"
+            android:shadowDy="1.0"
+            android:shadowRadius="1.0"
+            android:textColor="#ffebebeb"
+            android:textSize="@dimen/keyguard_lockscreen_status_line_font_size" />
+
+        <TextView
+            android:id="@+id/carrierGemini"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dip"
+            android:layout_marginTop="2dip"
+            android:drawablePadding="2dip"
+            android:ellipsize="marquee"
+            android:gravity="center_horizontal|center_vertical"
+            android:shadowColor="#ff000000"
+            android:shadowDx="1.0"
+            android:shadowDy="1.0"
+            android:shadowRadius="1.0"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#ffebebeb"
+            android:textSize="@dimen/keyguard_lockscreen_status_line_font_size" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/locklayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="15dip"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <ImageButton
+            android:id="@+id/ic_lock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/keyguard_unlock_circle_circleview_in"
+            android:src="@drawable/keyguard_lockscreen_lock" />
+
+        <com.huanghua.samsanglockscreen.Samsung_Indicator
+            android:id="@+id/ic_home"
+            android:layout_width="wrap_content"
+            android:layout_height="20dip"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dip" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/flareframelayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent" >
+    </FrameLayout>
+
+</RelativeLayout>

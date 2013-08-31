@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/tw_wifioffload_buttonbarbutton_selector_disabled_holo_light"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+
+        <GridLayout
+            android:id="@+id/color_grid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="3dip"
+            android:columnCount="8"
+            android:rowCount="2" >
+
+            <ImageButton
+                android:id="@+id/color_1"
+                android:layout_width="@dimen/lockscreen_color_icon_size"
+                android:layout_height="@dimen/lockscreen_color_icon_size"
+                android:layout_marginBottom="@dimen/lockscreen_color_icon_marger_bottom"
+                android:layout_marginRight="@dimen/lockscreen_color_icon_marger"
+                android:background="@color/color_1"
+                android:src="@drawable/color_button_bg" />
+
+            <ImageButton
+                android:id="@+id/color_2"
+                android:layout_width="@dimen/lockscreen_color_icon_size"
+                android:layout_height="@dimen/lockscreen_color_icon_size"
+                android:layout_marginRight="@dimen/lockscreen_color_icon_marger"
+                android:background="@color/color_2"
+                android:src="@drawable/color_button_bg" />
+
+            <ImageButton
+                android:id="@+id/color_3"
+                android:layout_width="@dimen/lockscreen_color_icon_size"
+                android:layout_height="@dimen/lockscreen_color_icon_size"
+                android:layout_marginRight="@dimen/lockscreen_color_icon_marger"
+                android:background="@color/color_3"
+                android:src="@drawable/color_button_bg" />
+
+            <ImageButton
+                android:id="@+id/color_4"
+                android:layout_width="@dimen/lockscreen_color_icon_size"
+                android:layout_height="@dimen/lockscreen_color_icon_size"
+                android:layout_marginRight="@dimen/lockscreen_color_icon_marger"
+                android:background="@color/color_4"
+                android:src="@drawable/color_button_bg" />
+
+            <ImageButton
+                android:id="@+id/color_5"
+                android:layout_width="@dimen/lockscreen_color_icon_size"
+                android:layout_height="@dimen/lockscreen_color_icon_size"
+                android:layout_marginRight="@dimen/lockscreen_color_icon_marger"
+                android:background="@color/color_5"
+                android:src="@drawable/color_button_bg" />
+
+            <ImageButton
+                android:id="@+id/color_6"
+                android:layout_width="@dimen/lockscreen_color_icon_size"
+                android:layout_height="@dimen/lockscreen_color_icon_size"
+                android:layout_marginRight="@dimen/lockscreen_color_icon_marger"
+                android:background="@color/color_6"
+                android:src="@drawable/color_button_bg" />
+
+            <ImageButton
+                android:id="@+id/color_7"
+                android:layout_width="@dimen/lockscreen_color_icon_size"
+                android:layout_height="@dimen/lockscreen_color_icon_size"
+                android:layout_marginRight="@dimen/lockscreen_color_icon_marger"
+                android:background="@color/color_7"
+                android:src="@drawable/color_button_bg" />
+
+            <ImageButton
+                android:id="@+id/color_8"
+                android:layout_width="@dimen/lockscreen_color_icon_size"
+                android:layout_height="@dimen/lockscreen_color_icon_size"
+                android:background="@color/color_8"
+                android:src="@drawable/color_button_bg" />
+
+            <ImageButton
+                android:id="@+id/color_9"
+                android:layout_width="@dimen/lockscreen_color_icon_size"
+                android:layout_height="@dimen/lockscreen_color_icon_size"
+                android:layout_marginRight="@dimen/lockscreen_color_icon_marger"
+                android:background="@color/color_9"
+                android:src="@drawable/color_button_bg" />
+
+            <ImageButton
+                android:id="@+id/color_10"
+                android:layout_width="@dimen/lockscreen_color_icon_size"
+                android:layout_height="@dimen/lockscreen_color_icon_size"
+                android:layout_marginRight="@dimen/lockscreen_color_icon_marger"
+                android:background="@color/color_10"
+                android:src="@drawable/color_button_bg" />
+
+            <ImageButton
+                android:id="@+id/color_11"
+                android:layout_width="@dimen/lockscreen_color_icon_size"
+                android:layout_height="@dimen/lockscreen_color_icon_size"
+                android:layout_marginRight="@dimen/lockscreen_color_icon_marger"
+                android:background="@color/color_11"
+                android:src="@drawable/color_button_bg" />
+
+            <ImageButton
+                android:id="@+id/color_12"
+                android:layout_width="@dimen/lockscreen_color_icon_size"
+                android:layout_height="@dimen/lockscreen_color_icon_size"
+                android:layout_marginRight="@dimen/lockscreen_color_icon_marger"
+                android:background="@color/color_12"
+                android:src="@drawable/color_button_bg" />
+
+            <ImageButton
+                android:id="@+id/color_13"
+                android:layout_width="@dimen/lockscreen_color_icon_size"
+                android:layout_height="@dimen/lockscreen_color_icon_size"
+                android:layout_marginRight="@dimen/lockscreen_color_icon_marger"
+                android:background="@color/color_13"
+                android:src="@drawable/color_button_bg" />
+
+            <ImageButton
+                android:id="@+id/color_14"
+                android:layout_width="@dimen/lockscreen_color_icon_size"
+                android:layout_height="@dimen/lockscreen_color_icon_size"
+                android:layout_marginRight="@dimen/lockscreen_color_icon_marger"
+                android:background="@color/color_14"
+                android:src="@drawable/color_button_bg" />
+
+            <ImageButton
+                android:id="@+id/color_15"
+                android:layout_width="@dimen/lockscreen_color_icon_size"
+                android:layout_height="@dimen/lockscreen_color_icon_size"
+                android:layout_marginRight="@dimen/lockscreen_color_icon_marger"
+                android:background="@color/color_15"
+                android:src="@drawable/color_button_bg" />
+
+            <ImageButton
+                android:id="@+id/color_16"
+                android:layout_width="@dimen/lockscreen_color_icon_size"
+                android:layout_height="@dimen/lockscreen_color_icon_size"
+                android:background="@color/color_16"
+                android:src="@drawable/color_button_bg" />
+        </GridLayout>
+
+        <com.huanghua.colorselecter.ColorPickerView
+            android:id="@+id/color_picker"
+            android:layout_width="match_parent"
+            android:layout_height="60dip" />
+    </LinearLayout>
+
+</RelativeLayout>

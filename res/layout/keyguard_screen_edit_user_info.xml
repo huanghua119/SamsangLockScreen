@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/pond"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/top_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical" >
+
+        <Button
+            android:id="@+id/ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="@android:string/ok" />
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/ok"
+            android:text="@android:string/cancel" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/timelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top_view"
+        android:layout_gravity="top"
+        android:layout_marginLeft="@dimen/keyguard_lockscreen_timelayout_margin"
+        android:layout_marginRight="@dimen/keyguard_lockscreen_timelayout_margin"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/logo"
+            android:layout_width="match_parent"
+            android:layout_height="60dip"
+            android:layout_marginTop="31dip"
+            android:background="@android:color/black"
+            android:gravity="center_vertical"
+            android:inputType="none"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="@string/logo_text"
+            android:textColor="@android:color/white" />
+
+        <com.huanghua.samsanglockscreen.DigitalClock
+            android:id="@+id/time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip" >
+
+            <ImageView
+                android:id="@+id/ic_time_hour1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left" />
+
+            <ImageView
+                android:id="@+id/ic_time_hour2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_toRightOf="@id/ic_time_hour1" />
+
+            <ImageView
+                android:id="@+id/ic_time_dot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_toRightOf="@id/ic_time_hour2"
+                android:src="@drawable/keyguard_lockscreen_time_dot" />
+
+            <ImageView
+                android:id="@+id/ic_time_minute1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_toRightOf="@id/ic_time_dot" />
+
+            <ImageView
+                android:id="@+id/ic_time_minute2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_toRightOf="@id/ic_time_minute1" />
+
+            <ImageView
+                android:id="@+id/ic_time_ampm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_toRightOf="@id/ic_time_minute2" />
+        </com.huanghua.samsanglockscreen.DigitalClock>
+
+        <LinearLayout
+            android:id="@+id/datelayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/time"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dip"
+                android:shadowColor="#e6000000"
+                android:shadowDx="1.0"
+                android:shadowDy="1.0"
+                android:shadowRadius="1.0"
+                android:textColor="@color/lockscreen_clock_background"
+                android:textSize="16dip" />
+
+            <TextView
+                android:id="@+id/alarm_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dip"
+                android:layout_marginTop="2dip"
+                android:layout_toRightOf="@id/date"
+                android:drawablePadding="4dip"
+                android:shadowColor="#e6000000"
+                android:shadowDx="1.0"
+                android:shadowDy="1.0"
+                android:shadowRadius="1.0"
+                android:textColor="@color/lockscreen_clock_background"
+                android:textSize="16dip" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.huanghua.colorselecter.SansumColorSelecter
+        android:id="@+id/color_seleter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/timelayout"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip" >
+    </com.huanghua.colorselecter.SansumColorSelecter>
+
+</RelativeLayout>

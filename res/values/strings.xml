@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="app_name">SamsangLockScreen</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <!-- mtek add begin -->
+    <string name="lock_state_tip">Swipe screen to unlock</string>
+    <string name="lock_state_missedtip">Swipe to check missed event</string>
+    <string name="lock_state_icontip">Swipe shortcut to open APPs</string>
+    <string name="lock_call">Mssed call</string>
+    <string name="lock_call_count"><xliff:g id="num_missed_calls">%s</xliff:g> missed calls</string>
+    <string name="lock_sms">Message</string>
+    <string name="lock_sms_new">New message</string>
+    <string name="lock_sms_count"><xliff:g id="num_missed_messages">%s</xliff:g> new messages</string>
+    <string name="logo_text">心意合一</string>
+    <string name="lock_settings">锁屏选项</string>
+    <string name="lock_switch_fall">切换为水波纹</string>
+    <string name="lock_switch_sun">切换为阳光效果</string>
+    <string name="lock_setting_title">滑动选项</string>
+    <string name="lock_setting_edit_user_info">编辑个人信息</string>
+    <!-- mtek add end -->
+
+</resources>

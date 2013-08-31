@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="lock_setting_title"
+        android:title="@string/lock_setting_title" >
+        <PreferenceScreen
+            android:key="lock_setting_edit_user_info"
+            android:title="@string/lock_setting_edit_user_info" >
+            <intent
+                android:targetClass="com.huanghua.samsanglockscreen.LockScreenEditInfo"
+                android:targetPackage="com.huanghua.samsanglockscreen" />
+        </PreferenceScreen>
+    </PreferenceCategory>
+
+</PreferenceScreen>
