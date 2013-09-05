@@ -2,6 +2,8 @@
 package com.huanghua.colorselecter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
@@ -12,6 +14,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.huanghua.samsanglockscreen.R;
+
 public class ColorPickerView extends View {
 
     private int selectColor;
@@ -20,6 +24,10 @@ public class ColorPickerView extends View {
     private final int[] mColors;
     private OnColorChangedListener onColorChangeListenrer;
     private Shader shader = null;
+    private Bitmap mBitmap;
+    private float mBitmapX;
+    private float mBitmapY;
+    private boolean mIsFirst = true;
 
     int displayW = 0;
     int displayH = 0;
@@ -58,6 +66,8 @@ public class ColorPickerView extends View {
         mCenterPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mCenterPaint.setColor(0xFFFF0000);
         mCenterPaint.setStrokeWidth(5);
+        mIsFirst = true;
+        mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.widget_innerline);
     }
 
     private int interpColor(int colors[], float unit) {
@@ -104,7 +114,26 @@ public class ColorPickerView extends View {
             shader = new LinearGradient(0, 0, displayW, 0, mColors, null, TileMode.REPEAT);
             mPaint.setShader(shader);
         }
+        if (mIsFirst) {
+            mBitmapX = displayW / 2;
+            mBitmapY = displayH / 2;
+            mIsFirst = false;
+        }
+        if (mBitmapX + mBitmap.getWidth() / 2 > displayW) {
+            mBitmapX = displayW - mBitmap.getWidth() / 2;
+        }
+        if (mBitmapX - mBitmap.getWidth() / 2 < 0) {
+            mBitmapX = 0 + mBitmap.getWidth() / 2;
+        }
+        if (mBitmapY + mBitmap.getHeight() / 2 > displayH) {
+            mBitmapY = displayH - mBitmap.getHeight() / 2;
+        }
+        if (mBitmapY - mBitmap.getHeight() / 2 < 0) {
+            mBitmapY = 0 + mBitmap.getHeight() / 2;
+        }
         canvas.drawRect(0, 0, displayW, displayH, mPaint);
+        canvas.drawBitmap(mBitmap, mBitmapX - mBitmap.getWidth() / 2,
+                mBitmapY - mBitmap.getHeight() / 2, mPaint);
     }
 
     @Override
@@ -112,11 +141,14 @@ public class ColorPickerView extends View {
         float x = event.getX();
         if (onColorChangeListenrer != null)
             onColorChangeListenrer.colorChanged(interpColor(mColors, x));
+        mBitmapX = event.getX();
+        mBitmapY = event.getY();
         invalidate();
         return true;
     }
 
     private SansumColorSelecter mSelecter;
+
     public void setColorSelecter(SansumColorSelecter seleteter) {
         mSelecter = seleteter;
     }

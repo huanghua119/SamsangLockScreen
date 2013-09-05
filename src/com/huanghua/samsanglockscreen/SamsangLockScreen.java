@@ -1614,11 +1614,17 @@ class SamsangLockScreen extends LinearLayout {
         return sp.getInt("logo_text_color", Color.WHITE);
     }
 
+    private int getLogoTextBgColor() {
+        SharedPreferences sp = mContext.getSharedPreferences("samsung_lock", Context.MODE_PRIVATE);
+        return sp.getInt("logo_text_bgcolor", Color.TRANSPARENT);
+    }
+
     public void onResume() {
         if (mLogoText != null) {
             mLogoText.setText(getLogoText());
             mLogoText.setTextSize(TypedValue.COMPLEX_UNIT_SP, getLogoTextSize());
             mLogoText.setTextColor(getLogoTextColor());
+            mLogoText.setBackgroundColor(getLogoTextBgColor());
         }
     }
 }
