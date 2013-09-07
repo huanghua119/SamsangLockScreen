@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/port_container"
+    android:layout_width="@dimen/port_cell_width"
+    android:layout_height="@dimen/port_cell_height" >
+
+    <RelativeLayout
+        android:id="@+id/port_grid_data_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dip"
+        android:background="@drawable/grid_selector"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/port_grid_app_icon"
+            android:layout_width="@dimen/port_icon_size"
+            android:layout_height="@dimen/port_icon_size"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/add_selector" />
+
+        <TextView
+            android:id="@+id/port_grid_app_title"
+            android:layout_width="@dimen/port_label_width"
+            android:layout_height="@dimen/port_label_height"
+            android:layout_below="@+id/port_grid_app_icon"
+            android:layout_centerHorizontal="true"
+            android:ellipsize="end"
+            android:gravity="top|center"
+            android:maxLines="1"
+            android:shadowRadius="1.0"
+            android:singleLine="true"
+            android:text="@string/add_apps"
+            android:textColor="#ff000000"
+            android:textSize="@dimen/port_label_text_size" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/port_delete_button"
+        android:layout_width="23dip"
+        android:layout_height="23dip"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="14dip"
+        android:src="@drawable/homescreen_menu_icon_delete"
+        android:visibility="gone" />
+
+</RelativeLayout>

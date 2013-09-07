@@ -24,9 +24,24 @@
     <dimen name="keyguard_lockscreen_logo_textsize">30sp</dimen>
     <dimen name="keyguard_lockscreen_logo_textsize_min">16sp</dimen>
     <dimen name="keyguard_lockscreen_logo_textsize_delta">5sp</dimen>
-
     <dimen name="lockscreen_color_icon_size">34dip</dimen>
     <dimen name="lockscreen_color_icon_marger">2dip</dimen>
     <dimen name="lockscreen_color_icon_marger_bottom">2dip</dimen>
+    <dimen name="favorite_app_icon_height">100dip</dimen>
+    <dimen name="favorite_app_icon_width">75dip</dimen>
 
+    <dimen name="shadow_height">2.0dip</dimen>
+    <dimen name="edid_icon_size">42.0dip</dimen>
+    <dimen name="grid_vertical_spacing">0.0dip</dimen>
+    <dimen name="grid_horizontal_spacing">10.0dip</dimen>
+    <dimen name="gird_column_width">80.0dip</dimen>
+    <dimen name="body_margin_left">25.0dip</dimen>
+    <dimen name="body_margin_top">15.0dip</dimen>
+    <dimen name="body_margin_right">15.0dip</dimen>
+    <dimen name="port_cell_width">79.0dip</dimen>
+    <dimen name="port_cell_height">95.0dip</dimen>
+    <dimen name="port_icon_size">50.0dip</dimen>
+    <dimen name="port_label_width">80.0dip</dimen>
+    <dimen name="port_label_height">34.0dip</dimen>
+    <dimen name="port_label_text_size">14.0dip</dimen>
 </resources>

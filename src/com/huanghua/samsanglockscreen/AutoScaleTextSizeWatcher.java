@@ -34,6 +34,7 @@ public class AutoScaleTextSizeWatcher implements TextWatcher, OnKeyListener {
     protected int mPreviousDigitsLength;
     private boolean mIsDelete;
     private String mOldText;
+    private int mOldLength;
 
     public AutoScaleTextSizeWatcher(EditText editText) {
         mContext = editText.getContext();
@@ -64,11 +65,18 @@ public class AutoScaleTextSizeWatcher implements TextWatcher, OnKeyListener {
     }
 
     public void afterTextChanged(Editable s) {
+        int length = mTarget.getText().length();
+        if (mOldLength > length) {
+            mIsDelete = true;
+        } else {
+            mIsDelete = false;
+        }
         autoScaleTextSize(mIsDelete);
     }
 
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         //
+        mOldLength = s.length();
         mOldText = mTarget.getText().toString();
     }
 
@@ -82,6 +90,9 @@ public class AutoScaleTextSizeWatcher implements TextWatcher, OnKeyListener {
 
     protected void autoScaleTextSize(boolean delete) {
         mDigitsWidth = mTarget.getWidth();
+        if (mDigitsWidth == 0) {
+            return;
+        }
         final String digits = mTarget.getText().toString();
 
         if (digits.length() == 0) {

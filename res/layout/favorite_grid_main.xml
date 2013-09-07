@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.huanghua.apps.FavoriteApplicationsView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/favorite_view"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="top" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="@dimen/shadow_height"
+            android:background="@drawable/lock_favortie_bg"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:id="@+id/body_container"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/body_margin_left"
+                android:layout_marginRight="@dimen/body_margin_right"
+                android:layout_marginTop="@dimen/body_margin_top"
+                android:orientation="vertical" >
+
+                <GridView
+                    android:id="@+id/gridview"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:clickable="true"
+                    android:columnWidth="@dimen/gird_column_width"
+                    android:gravity="center"
+                    android:listSelector="@android:color/transparent"
+                    android:horizontalSpacing="@dimen/grid_horizontal_spacing"
+                    android:numColumns="3"
+                    android:verticalSpacing="@dimen/grid_vertical_spacing" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/delete_mode_button"
+                android:layout_width="@dimen/edid_icon_size"
+                android:layout_height="@dimen/edid_icon_size"
+                android:layout_gravity="bottom|right|center"
+                android:layout_marginTop="26.0dip" >
+
+                <ImageView
+                    android:id="@+id/edit_icon"
+                    android:layout_width="@dimen/edid_icon_size"
+                    android:layout_height="@dimen/edid_icon_size"
+                    android:layout_gravity="bottom"
+                    android:background="#00000000"
+                    android:clickable="true"
+                    android:src="@drawable/edit_selector" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/shadow_height"
+            android:layout_gravity="bottom"
+            android:background="@drawable/lock_faborite_shadow" />
+    </FrameLayout>
+
+</com.huanghua.apps.FavoriteApplicationsView>

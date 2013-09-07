@@ -20,6 +20,8 @@
     <string name="lock_setting_title">滑动选项</string>
     <string name="lock_setting_edit_user_info">编辑个人信息</string>
     <string name="store">存储</string>
+    <string name="add_apps">添加应用程序</string>
+    <string name="samsung_apps">常用应用程序</string>
     <!-- mtek add end -->
 
 </resources>

@@ -1624,7 +1624,7 @@ class SamsangLockScreen extends LinearLayout {
             mLogoText.setText(getLogoText());
             mLogoText.setTextSize(TypedValue.COMPLEX_UNIT_SP, getLogoTextSize());
             mLogoText.setTextColor(getLogoTextColor());
-            mLogoText.setBackgroundColor(getLogoTextBgColor());
+            //mLogoText.setBackgroundColor(getLogoTextBgColor());
         }
     }
 }
