@@ -45,6 +45,7 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -304,20 +305,26 @@ class SamsangLockScreen extends LinearLayout {
          * mUpdateMonitor, mLockPatternUtils, mCallback, false);
          */
 
-        setFocusable(true);
-        setFocusableInTouchMode(true);
-        setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
+        //setFocusable(true);
+        //setFocusableInTouchMode(true);
+        //setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
 
-        /*
-         * DisplayMetrics dm = getResources().getDisplayMetrics();
-         * WallpaperManager wm = WallpaperManager.getInstance(context);
-         * WallpaperBitmap = ((BitmapDrawable) wm.getDrawable()).getBitmap(); if
-         * (WallpaperBitmap != null) { if (mBitmap != null) { mBitmap.recycle();
-         * mBitmap = null; } mBitmap = Bitmap.createBitmap(dm.widthPixels,
-         * dm.heightPixels, Bitmap.Config.ARGB_8888); Canvas localCanvas = new
-         * Canvas(); localCanvas.setBitmap(mBitmap);
-         * localCanvas.drawBitmap(WallpaperBitmap, 0, 0, null); }
-         */
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        WallpaperManager wm = WallpaperManager.getInstance(context);
+        WallpaperBitmap = ((BitmapDrawable) wm.getDrawable()).getBitmap();
+        if (WallpaperBitmap != null) {
+            if (mBitmap != null) {
+                mBitmap.recycle();
+                mBitmap = null;
+            }
+            mBitmap = Bitmap.createBitmap(dm.widthPixels,
+                    dm.heightPixels, Bitmap.Config.ARGB_8888);
+            Canvas localCanvas = new
+                    Canvas();
+            localCanvas.setBitmap(mBitmap);
+            localCanvas.drawBitmap(WallpaperBitmap, 0, 0, null);
+        }
+        
         mCarrierView = (TextView) findViewById(R.id.carrier);
         mCarrierGeminiView = (TextView) findViewById(R.id.carrierGemini);
         mCarrierDivider = (TextView) findViewById(R.id.carrierDivider);
@@ -343,6 +350,14 @@ class SamsangLockScreen extends LinearLayout {
         mTimeFrameBg = (ImageView) findViewById(R.id.timeframe_bg);
         mUnlockText = (TextView) findViewById(R.id.unlock);
         mFlareShadow = (ImageView) findViewById(R.id.flare_shadow);
+        ImageButton lock = (ImageButton) findViewById(R.id.ic_lock);
+        lock.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View arg0, MotionEvent arg1) {
+                onTouchEvent(arg1);
+                return false;
+            }
+        });
 
         sendMessageToHandler(MSG_SMS_QUERY);
         sendMessageToHandler(MSG_MMS_QUERY);
@@ -355,8 +370,8 @@ class SamsangLockScreen extends LinearLayout {
         initMissedMsg();
         playSoundsInit(context);
         flareInit();
-        mWaterlayout = (FrameLayout) findViewById(R.id.waterlayout);
-        mFallView = (FallView) mWaterlayout.findViewById(R.id.fall_view);
+        //mWaterlayout = (FrameLayout) findViewById(R.id.waterlayout);
+        //mFallView = (FallView) mWaterlayout.findViewById(R.id.fall_view);
         if (mIsFallRs) {
             // mWaterlayout.setVisibility(View.VISIBLE);
         } else {
@@ -391,11 +406,15 @@ class SamsangLockScreen extends LinearLayout {
         TOUCH_ICON_RECT[TOUCH_FLARE_SHADOW][3] = 700;
     }
 
-    /*
-     * @Override protected void onDraw(Canvas canvas) { super.onDraw(canvas); if
-     * (mBitmap != null) { canvas.drawBitmap(mBitmap, 0, 0 - mStatusBarHeight,
-     * null); postInvalidate(); } }
-     */
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        if (mBitmap != null) {
+            canvas.drawBitmap(mBitmap, 0, 0 - mStatusBarHeight,
+                    null);
+            postInvalidate();
+        }
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -404,7 +423,9 @@ class SamsangLockScreen extends LinearLayout {
         float y = event.getRawY();
         int mMoveX = (int) (x - mDownX);
         int mMoveY = (int) (y - mDownY);
-
+        Log.i("hh2", "mFlareFrameLayout "+ mFlareFrameLayout.isHardwareAccelerated());
+        Log.i("hh2", " "+ isHardwareAccelerated());
+        Log.i("hh", "onTouchEvent start");
         switch (action)
         {
             case MotionEvent.ACTION_DOWN:
@@ -468,7 +489,7 @@ class SamsangLockScreen extends LinearLayout {
                     }
                 } else {
                     if (mIsFallRs) {
-                        mFallView.onMyTouchEvent(event);
+                        //mFallView.onMyTouchEvent(event);
                         mMoveDistance = 0.0D;
                     } else {
                         mMoveDistance = 0.0D;
@@ -508,7 +529,7 @@ class SamsangLockScreen extends LinearLayout {
                             flareUnlock();
                         } else {
                             if (mIsFallRs) {
-                                mFallView.onMyTouchEvent(event);
+                                //mFallView.onMyTouchEvent(event);
                             } else {
                                 flareMove(x, y);
                                 hoverMove(x, y);
@@ -516,7 +537,7 @@ class SamsangLockScreen extends LinearLayout {
                         }
                     } else {
                         if (mIsFallRs) {
-                            mFallView.onMyTouchEvent(event);
+                            //mFallView.onMyTouchEvent(event);
                         } else {
                             flareMove(x, y);
                             hoverMove(x, y);
@@ -536,7 +557,7 @@ class SamsangLockScreen extends LinearLayout {
                     }
                 } else {
                     if (mIsFallRs) {
-                        mFallView.onMyTouchEvent(event);
+                        //mFallView.onMyTouchEvent(event);
                     }
                     mMoveDistance = Math.sqrt(Math.pow(mMoveX, 2.0D) + Math.pow(mMoveY, 2.0D));
                     if (mMoveUnlock) {
@@ -552,6 +573,7 @@ class SamsangLockScreen extends LinearLayout {
         mStatusView.setVisibility(View.GONE);
         mUnlockText.setVisibility(View.GONE);
         mCarrierLinearLayout.setVisibility(View.GONE);
+        Log.i("hh", "onTouchEvent end");
         return true;
     }
 
@@ -635,14 +657,14 @@ class SamsangLockScreen extends LinearLayout {
     private void playSoundsTouchDown()
     {
         if ((soundPool != null) && (hashMap != null)) {
-            soundPool.play(((Integer) hashMap.get(Integer.valueOf(1))).intValue(), 1.0F, 1.0F, 0,
+            soundPool.play(((Integer) hashMap.get(Integer.valueOf(1))).intValue(), 10.0F, 10.0F, 0,
                     0, 1.0F);
         }
     }
 
     private void playSoundsTouchUp() {
         if ((soundPool != null) && (hashMap != null)) {
-            soundPool.play(((Integer) hashMap.get(Integer.valueOf(2))).intValue(), 1.0F, 1.0F, 0,
+            soundPool.play(((Integer) hashMap.get(Integer.valueOf(2))).intValue(), 7.0F, 7.0F, 0,
                     0, 1.0F);
         }
     }
@@ -972,6 +994,7 @@ class SamsangLockScreen extends LinearLayout {
     }
 
     private void animatedDragAlpha() {
+        Log.i("hh", "animatedDragAlpha");
         fogAlpha = getCorrectAlpha(fogAnimationValue * (1.0f - distancePerMaxAlpha));
         objAlpha = getCorrectAlpha(3.0f * distancePerMaxAlpha);
         vignettingAlpha = getCorrectAlpha(1.3f * distancePerMaxAlpha);
@@ -983,6 +1006,7 @@ class SamsangLockScreen extends LinearLayout {
     }
 
     private void animatedDragPos() {
+        Log.i("hh", "animatedDragPos");
         float f1 = 1.0f + 1.0f * distancePerMaxAlpha;
         mFlareLight.setScaleX(f1);
         mFlareLight.setScaleY(f1);
@@ -996,6 +1020,7 @@ class SamsangLockScreen extends LinearLayout {
     }
 
     private void animatedFadeOut() {
+        Log.i("hh", "animatedFadeOut");
         setAlphaAndVisibility(mFlareLight, fogAlpha * fadeoutAnimationValue);
         setAlphaAndVisibility(mFlareVignetting, vignettingAlpha * fadeoutAnimationValue);
         for (int i = 0; i < HEXAGON_TOTAL; i++) {
@@ -1004,6 +1029,7 @@ class SamsangLockScreen extends LinearLayout {
     }
 
     private void animatedHoverLight() {
+        Log.i("hh", "animatedHoverLight");
         hoverLight.setScaleX(hoverLightAnimationValue * 3);
         hoverLight.setScaleY(hoverLightAnimationValue * 3);
     }
@@ -1021,6 +1047,7 @@ class SamsangLockScreen extends LinearLayout {
         }
 
         while (true) {
+            Log.i("hh", "animatedTap");
             setAlphaAndVisibility(tapHexagon[i], f1);
             float f3 = tapHexagonScale[i] * (0.7f + 0.8f * tapAnimationValue);
             tapHexagon[i].setScaleX(f3);
@@ -1069,6 +1096,7 @@ class SamsangLockScreen extends LinearLayout {
     }
 
     private void animatedUnlock() {
+        Log.i("hh", "animatedUnlock");
         float f1 = 1.0f + 2.0f * unlockAnimationValue;
         float f2;
         if (unlockAnimationValue < 0.5f) {
@@ -1108,6 +1136,7 @@ class SamsangLockScreen extends LinearLayout {
     }
 
     private void hoverEnter(float x, float y) {
+        Log.i("hh", "hoverEnter");
         hoverX = x + X_OFFSET;
         hoverY = y + Y_OFFSET;
         setAlphaAndVisibility(hoverLight, 1.0f);
@@ -1117,12 +1146,14 @@ class SamsangLockScreen extends LinearLayout {
     }
 
     private void hoverExit() {
+        Log.i("hh", "hoverExit");
         cancelAnimator(hoverLightInAnimator);
         cancelAnimator(hoverLightOutAnimator);
         hoverLightOutAnimator.start();
     }
 
     private void hoverMove(float x, float y) {
+        Log.i("hh", "hoverMove");
         hoverX = x + X_OFFSET;
         hoverY = y + Y_OFFSET;
         setCenterPos(hoverLight, showStartX, showStartY, hoverX, hoverY, 1.0f);
@@ -1220,6 +1251,7 @@ class SamsangLockScreen extends LinearLayout {
 
     private void setCenterPos(View view, float mStartX, float mStartY, float mCurrentX,
             float mCurrentY, float mScaleValue) {
+        Log.i("hh", "setCenterPos2");
         float f1 = mStartX + mScaleValue * (mCurrentX - mStartX);
         float f2 = mStartY + mScaleValue * (mCurrentY - mStartY);
         float f3 = f1 - view.getWidth() / 2.0f;
@@ -1232,6 +1264,7 @@ class SamsangLockScreen extends LinearLayout {
 
     private void setCenterPos(View view, float mStartX, float mStartY, float mCurrentX,
             float mCurrentY, float mDistanceValue, float mScaleValue, int mRotateAngle) {
+        Log.i("hh", "setCenterPos");
         float f1 = 0.5f + 0.5f * ((float) distance / 720.0f);
         float f2 = (0.5f + 0.5f * objAnimationValue) * (mScaleValue * f1);
         view.setScaleX(f2);
@@ -1401,12 +1434,14 @@ class SamsangLockScreen extends LinearLayout {
     }
 
     public void flareHide() {
+        Log.i("hh", "flareHide");
         isTouched = false;
         cancelAnimator(fogOnAnimator);
         fadeOutAnimator.start();
     }
 
     public void flareMove(float x, float y) {
+        Log.i("hh", "flareMove");
         if (!isTouched) {
             flareShow(x, y);
         }
@@ -1420,6 +1455,7 @@ class SamsangLockScreen extends LinearLayout {
     }
 
     public void flareShow(float x, float y) {
+        Log.i("hh", "flareShow");
         isTouched = true;
         distance = 0.0D;
         distancePerMaxAlpha = 0.0f;
@@ -1445,6 +1481,7 @@ class SamsangLockScreen extends LinearLayout {
     }
 
     public void flareUnlock() {
+        Log.i("hh", "flareUnlock");
         if (!unlockAnimator.isRunning()) {
             float f = (float) (180.0D * Math.atan2(currentY - showStartY, currentX - showStartX) / 3.141592653589793D) - 40.0f;
             mFlareRainbow.setRotation(f);
@@ -1590,7 +1627,8 @@ class SamsangLockScreen extends LinearLayout {
     }
 
     public void switchLockEffect(int effect) {
-        mIsFallRs = effect == 0 ? true : false;
+        //mIsFallRs = effect == 0 ? true : false;
+        mIsFallRs = false;
         if (mIsFallRs) {
             // mWaterlayout.setVisibility(View.VISIBLE);
         } else {
