@@ -2,6 +2,7 @@
 package com.huanghua.apps;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -30,6 +31,7 @@ public class FavoriteApplicationsView extends RelativeLayout implements View.OnC
     private GridView mAllApps;
     private PackageManager mPackageManager;
     private ImageView mEditView;
+    private AllApplicationsDialog mAllDialog;
     private boolean mEditMode = false;
 
     final String mSettingKeyStrings[] = {
@@ -120,6 +122,7 @@ public class FavoriteApplicationsView extends RelativeLayout implements View.OnC
         mAllApps.setAdapter(mBaseAdapter);
         mAllApps.setOnItemClickListener(this);
         mPackageManager = mContext.getPackageManager();
+        mAllDialog = new AllApplicationsDialog(mContext);
     }
 
     private String getSphoneCustomApp(int position) {
@@ -148,10 +151,13 @@ public class FavoriteApplicationsView extends RelativeLayout implements View.OnC
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
         Object obj = arg1.getTag();
         if (obj == null) {
-            Intent intent = new Intent();
-            intent.setClass(mContext, AllApplications.class);
-            intent.putExtra("sphone_custom_app", arg2);
-            mContext.startActivity(intent);
+            //Intent intent = new Intent();
+            //intent.setClass(mContext, AllApplications.class);
+            //intent.putExtra("sphone_custom_app", arg2);
+            //mContext.startActivity(intent);
+            mAllDialog.setOnDismissListener(mDialogDismissListener);
+            mAllDialog.setSphoneCustomApp(arg2);
+            mAllDialog.show();
         } else {
             if (mEditMode) {
                 setSphoneCustomApp("", arg2);
@@ -168,4 +174,10 @@ public class FavoriteApplicationsView extends RelativeLayout implements View.OnC
             mBaseAdapter.notifyDataSetInvalidated();
         }
     }
+    private DialogInterface.OnDismissListener mDialogDismissListener = new DialogInterface.OnDismissListener() {
+        @Override
+        public void onDismiss(DialogInterface dialog) {
+            mBaseAdapter.notifyDataSetInvalidated();
+        }
+    };
 }
