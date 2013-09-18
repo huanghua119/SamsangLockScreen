@@ -6,10 +6,13 @@ import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.app.ActivityManager;
 import android.app.WallpaperManager;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.database.Cursor;
@@ -54,6 +57,7 @@ import com.huanghua.rs.FallView;
 
 import java.io.File;
 import java.lang.reflect.TypeVariable;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 
 class SamsangLockScreen extends LinearLayout {
@@ -229,6 +233,32 @@ class SamsangLockScreen extends LinearLayout {
     private FrameLayout mWaterlayout;
     private TextView mLogoText;
 
+    private static final int NUM_OF_ICONS = 5;
+    private ImageView mLockShortcutApps[];
+    private int mIconsBackSize;
+    private int[] mShortcutAppsIds = {
+            R.id.lock_app_1,
+            R.id.lock_app_2,
+            R.id.lock_app_3,
+            R.id.lock_app_4,
+            R.id.lock_app_5,
+    };
+    final String mSettingKeyStrings[] = {
+            "samsunglockscreen_shortcut_app_activity",
+            "samsunglockscreen_shortcut_app_activity2",
+            "samsunglockscreen_shortcut_app_activity3",
+            "samsunglockscreen_shortcut_app_activity4",
+            "samsunglockscreen_shortcut_app_activity5",
+    };
+    final String mSettingDefaultStrings[] = {
+            "com.android.contacts", "com.android.email", "com.android.browser", "com.android.mms", "com.huanghua.samsanglockscreen",
+    };
+
+    final String mSettingDefaultStrings2[] = {
+            "com.android.contacts.activities.DialtactsActivity", "com.android.email.activity.Welcome",
+            "com.android.browser.BrowserActivity", "com.android.mms.ui.BootActivity","com.huanghua.samsanglockscreen.MainActivity",
+    };
+
     public SamsangLockScreen(Context context) {
         this(context, null);
     }
@@ -379,6 +409,47 @@ class SamsangLockScreen extends LinearLayout {
         }
         mLogoText = (TextView) findViewById(R.id.logo);
         setBackgroundColor(0x00000000);
+
+        mIconsBackSize =  getResources().getDimensionPixelSize(
+                R.dimen.lock_icon_back_size);
+        mLockShortcutApps = new ImageView[NUM_OF_ICONS];
+        int left;
+        ViewGroup.MarginLayoutParams mlp;
+        String uri;
+        final PackageManager pm = context.getPackageManager();
+        Drawable d2;
+        for (int i = 0; i < NUM_OF_ICONS; i++) {
+            mLockShortcutApps[i] = (ImageView) findViewById(mShortcutAppsIds[i]);
+            left = (dm.widthPixels - NUM_OF_ICONS * mIconsBackSize) / (NUM_OF_ICONS + 1);
+            mlp = (ViewGroup.MarginLayoutParams) mLockShortcutApps[i].getLayoutParams();
+            mlp.setMargins(left, 0, 0, 0);
+            uri = getShortCutAppUri(mSettingKeyStrings[i]);
+            try {
+                Intent intent;
+                if (null == uri || uri.equals("")) {
+                    uri = mSettingDefaultStrings[i];
+                    intent = new Intent(Intent.ACTION_MAIN, null);
+                    intent.setClassName(mSettingDefaultStrings[i], mSettingDefaultStrings2[i]);
+                    intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                    uri = intent.toUri(0);
+                    setShortCutAppUri(mSettingKeyStrings[i],
+                            uri);
+                } else {
+                    intent = Intent.parseUri(uri, 0);
+                }
+                ActivityInfo info = intent.resolveActivityInfo(pm,
+                        Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                if (info != null) {
+                    d2 = info.loadIcon(pm);
+                    mLockShortcutApps[i].setTag(intent);
+                    mLockShortcutApps[i].setImageDrawable(d2);
+                }
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            } catch (ActivityNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private boolean shouldEnableMenuKey() {
@@ -423,9 +494,6 @@ class SamsangLockScreen extends LinearLayout {
         float y = event.getRawY();
         int mMoveX = (int) (x - mDownX);
         int mMoveY = (int) (y - mDownY);
-        Log.i("hh2", "mFlareFrameLayout "+ mFlareFrameLayout.isHardwareAccelerated());
-        Log.i("hh2", " "+ isHardwareAccelerated());
-        Log.i("hh", "onTouchEvent start");
         switch (action)
         {
             case MotionEvent.ACTION_DOWN:
@@ -569,11 +637,9 @@ class SamsangLockScreen extends LinearLayout {
                 mMoveUnlock = false;
                 break;
         }
-        mLockLinearLayout.setVisibility(View.VISIBLE);
         mStatusView.setVisibility(View.GONE);
         mUnlockText.setVisibility(View.GONE);
         mCarrierLinearLayout.setVisibility(View.GONE);
-        Log.i("hh", "onTouchEvent end");
         return true;
     }
 
@@ -994,7 +1060,6 @@ class SamsangLockScreen extends LinearLayout {
     }
 
     private void animatedDragAlpha() {
-        Log.i("hh", "animatedDragAlpha");
         fogAlpha = getCorrectAlpha(fogAnimationValue * (1.0f - distancePerMaxAlpha));
         objAlpha = getCorrectAlpha(3.0f * distancePerMaxAlpha);
         vignettingAlpha = getCorrectAlpha(1.3f * distancePerMaxAlpha);
@@ -1006,7 +1071,6 @@ class SamsangLockScreen extends LinearLayout {
     }
 
     private void animatedDragPos() {
-        Log.i("hh", "animatedDragPos");
         float f1 = 1.0f + 1.0f * distancePerMaxAlpha;
         mFlareLight.setScaleX(f1);
         mFlareLight.setScaleY(f1);
@@ -1020,7 +1084,6 @@ class SamsangLockScreen extends LinearLayout {
     }
 
     private void animatedFadeOut() {
-        Log.i("hh", "animatedFadeOut");
         setAlphaAndVisibility(mFlareLight, fogAlpha * fadeoutAnimationValue);
         setAlphaAndVisibility(mFlareVignetting, vignettingAlpha * fadeoutAnimationValue);
         for (int i = 0; i < HEXAGON_TOTAL; i++) {
@@ -1029,7 +1092,6 @@ class SamsangLockScreen extends LinearLayout {
     }
 
     private void animatedHoverLight() {
-        Log.i("hh", "animatedHoverLight");
         hoverLight.setScaleX(hoverLightAnimationValue * 3);
         hoverLight.setScaleY(hoverLightAnimationValue * 3);
     }
@@ -1047,7 +1109,6 @@ class SamsangLockScreen extends LinearLayout {
         }
 
         while (true) {
-            Log.i("hh", "animatedTap");
             setAlphaAndVisibility(tapHexagon[i], f1);
             float f3 = tapHexagonScale[i] * (0.7f + 0.8f * tapAnimationValue);
             tapHexagon[i].setScaleX(f3);
@@ -1096,7 +1157,6 @@ class SamsangLockScreen extends LinearLayout {
     }
 
     private void animatedUnlock() {
-        Log.i("hh", "animatedUnlock");
         float f1 = 1.0f + 2.0f * unlockAnimationValue;
         float f2;
         if (unlockAnimationValue < 0.5f) {
@@ -1136,7 +1196,6 @@ class SamsangLockScreen extends LinearLayout {
     }
 
     private void hoverEnter(float x, float y) {
-        Log.i("hh", "hoverEnter");
         hoverX = x + X_OFFSET;
         hoverY = y + Y_OFFSET;
         setAlphaAndVisibility(hoverLight, 1.0f);
@@ -1146,14 +1205,12 @@ class SamsangLockScreen extends LinearLayout {
     }
 
     private void hoverExit() {
-        Log.i("hh", "hoverExit");
         cancelAnimator(hoverLightInAnimator);
         cancelAnimator(hoverLightOutAnimator);
         hoverLightOutAnimator.start();
     }
 
     private void hoverMove(float x, float y) {
-        Log.i("hh", "hoverMove");
         hoverX = x + X_OFFSET;
         hoverY = y + Y_OFFSET;
         setCenterPos(hoverLight, showStartX, showStartY, hoverX, hoverY, 1.0f);
@@ -1251,7 +1308,6 @@ class SamsangLockScreen extends LinearLayout {
 
     private void setCenterPos(View view, float mStartX, float mStartY, float mCurrentX,
             float mCurrentY, float mScaleValue) {
-        Log.i("hh", "setCenterPos2");
         float f1 = mStartX + mScaleValue * (mCurrentX - mStartX);
         float f2 = mStartY + mScaleValue * (mCurrentY - mStartY);
         float f3 = f1 - view.getWidth() / 2.0f;
@@ -1264,7 +1320,6 @@ class SamsangLockScreen extends LinearLayout {
 
     private void setCenterPos(View view, float mStartX, float mStartY, float mCurrentX,
             float mCurrentY, float mDistanceValue, float mScaleValue, int mRotateAngle) {
-        Log.i("hh", "setCenterPos");
         float f1 = 0.5f + 0.5f * ((float) distance / 720.0f);
         float f2 = (0.5f + 0.5f * objAnimationValue) * (mScaleValue * f1);
         view.setScaleX(f2);
@@ -1434,14 +1489,12 @@ class SamsangLockScreen extends LinearLayout {
     }
 
     public void flareHide() {
-        Log.i("hh", "flareHide");
         isTouched = false;
         cancelAnimator(fogOnAnimator);
         fadeOutAnimator.start();
     }
 
     public void flareMove(float x, float y) {
-        Log.i("hh", "flareMove");
         if (!isTouched) {
             flareShow(x, y);
         }
@@ -1455,7 +1508,6 @@ class SamsangLockScreen extends LinearLayout {
     }
 
     public void flareShow(float x, float y) {
-        Log.i("hh", "flareShow");
         isTouched = true;
         distance = 0.0D;
         distancePerMaxAlpha = 0.0f;
@@ -1481,7 +1533,6 @@ class SamsangLockScreen extends LinearLayout {
     }
 
     public void flareUnlock() {
-        Log.i("hh", "flareUnlock");
         if (!unlockAnimator.isRunning()) {
             float f = (float) (180.0D * Math.atan2(currentY - showStartY, currentX - showStartX) / 3.141592653589793D) - 40.0f;
             mFlareRainbow.setRotation(f);
@@ -1655,6 +1706,18 @@ class SamsangLockScreen extends LinearLayout {
     private int getLogoTextBgColor() {
         SharedPreferences sp = mContext.getSharedPreferences("samsung_lock", Context.MODE_PRIVATE);
         return sp.getInt("logo_text_bgcolor", Color.TRANSPARENT);
+    }
+
+    private String getShortCutAppUri(String id) {
+        SharedPreferences sp = mContext.getSharedPreferences("samsung_lock", Context.MODE_PRIVATE);
+        return sp.getString(id, "");
+    }
+
+    private void setShortCutAppUri(String id, String uri) {
+        SharedPreferences sp = mContext.getSharedPreferences("samsung_lock", Context.MODE_PRIVATE);
+        SharedPreferences.Editor spd = sp.edit();
+        spd.putString(uri, id);
+        spd.commit();
     }
 
     public void onResume() {

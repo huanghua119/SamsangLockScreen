@@ -430,6 +430,45 @@
             android:layout_marginTop="10dip" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/lock_shortcut_app"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dip"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/lock_app_1"
+            android:layout_width="@dimen/lock_icon_back_size"
+            android:layout_height="@dimen/lock_icon_back_size"
+            android:contentDescription="@string/action_settings" />
+
+        <ImageView
+            android:id="@+id/lock_app_2"
+            android:layout_width="@dimen/lock_icon_back_size"
+            android:layout_height="@dimen/lock_icon_back_size"
+            android:contentDescription="@string/action_settings" />
+
+        <ImageView
+            android:id="@+id/lock_app_3"
+            android:layout_width="@dimen/lock_icon_back_size"
+            android:layout_height="@dimen/lock_icon_back_size"
+            android:contentDescription="@string/action_settings" />
+
+        <ImageView
+            android:id="@+id/lock_app_4"
+            android:layout_width="@dimen/lock_icon_back_size"
+            android:layout_height="@dimen/lock_icon_back_size"
+            android:contentDescription="@string/action_settings" />
+
+        <ImageView
+            android:id="@+id/lock_app_5"
+            android:layout_width="@dimen/lock_icon_back_size"
+            android:layout_height="@dimen/lock_icon_back_size"
+            android:contentDescription="@string/action_settings" />
+    </LinearLayout>
+
     <FrameLayout
         android:id="@+id/flareframelayout"
         android:layout_width="match_parent"
