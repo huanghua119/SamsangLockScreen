@@ -2,9 +2,7 @@
 package com.huanghua.apps;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
@@ -28,21 +26,7 @@ public class AllApplications extends Activity implements OnItemClickListener {
     private ListView mListView;
     private LayoutInflater mInflater;
     private ArrayList<ApplicationInfo> mAppApps;
-    private int mSphoneCustomApp = -1;
-    final String mSettingKeyStrings[] = {
-            "SPHONELOCKSCREEN_CUSTOM_APP_ACTIVITY_1",
-            "SPHONELOCKSCREEN_CUSTOM_APP_ACTIVITY_2",
-            "SPHONELOCKSCREEN_CUSTOM_APP_ACTIVITY_3",
-            "SPHONELOCKSCREEN_CUSTOM_APP_ACTIVITY_4",
-            "SPHONELOCKSCREEN_CUSTOM_APP_ACTIVITY_5",
-            "SPHONELOCKSCREEN_CUSTOM_APP_ACTIVITY_6",
-            "SPHONELOCKSCREEN_CUSTOM_APP_ACTIVITY_7",
-            "SPHONELOCKSCREEN_CUSTOM_APP_ACTIVITY_8",
-            "SPHONELOCKSCREEN_CUSTOM_APP_ACTIVITY_9",
-            "SPHONELOCKSCREEN_CUSTOM_APP_ACTIVITY_10",
-            "SPHONELOCKSCREEN_CUSTOM_APP_ACTIVITY_11",
-            "SPHONELOCKSCREEN_CUSTOM_APP_ACTIVITY_12",
-    };
+    private ArrayList<String> mFliter;
 
     private class ApplicationInfo {
         String name;
@@ -54,15 +38,18 @@ public class AllApplications extends Activity implements OnItemClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.app_applications);
+        setContentView(R.layout.app_applications_black);
         mInflater = LayoutInflater.from(this);
         mListView = (ListView) findViewById(R.id.list);
+        boolean hasFilter = getIntent().hasExtra("filter_list");
+        if (hasFilter) {
+            mFliter = getIntent().getStringArrayListExtra("filter_list");
+        }
         loadAllAppsByBatch();
-        mSphoneCustomApp = getIntent().getIntExtra("sphone_custom_app", -1);
         mListView.setAdapter(new BaseAdapter() {
             @Override
             public View getView(int arg0, View arg1, ViewGroup arg2) {
-                View view = mInflater.inflate(R.layout.app_list, null);
+                View view = mInflater.inflate(R.layout.app_list_black, null);
                 TextView mApp = (TextView) view.findViewById(R.id.digits);
                 ApplicationInfo info = mAppApps.get(arg0);
                 mApp.setText(info.name);
@@ -114,24 +101,20 @@ public class AllApplications extends Activity implements OnItemClickListener {
                     info.activityInfo.name);
             intent.addCategory(Intent.CATEGORY_LAUNCHER);
             aInfo.uri = intent.toUri(0);
-            mAppApps.add(aInfo);
+            if (mFliter != null && mFliter.contains(aInfo.uri)) {
+                continue;
+            } else {
+                mAppApps.add(aInfo);
+            }
         }
-
     }
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        if (mSphoneCustomApp != -1) {
-            setSphoneCustomApp((String) arg1.getTag(), mSphoneCustomApp);
-        }
+        Intent data = new Intent();
+        data.putExtra("app_uri", (String) arg1.getTag());
+        setResult(RESULT_OK, data);
         finish();
-    }
-
-    private void setSphoneCustomApp(String uri, int position) {
-        SharedPreferences sp = getSharedPreferences("samsung_lock", Context.MODE_PRIVATE);
-        SharedPreferences.Editor spe = sp.edit();
-        spe.putString(mSettingKeyStrings[position], uri);
-        spe.commit();
     }
 
 }

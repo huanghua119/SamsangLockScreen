@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/top_view"
+        android:layout_width="wrap_content"
+        android:layout_height="48dip"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/activity_title_bar"
+        android:gravity="center_vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:drawableLeft="@drawable/tw_action_bar_icon_holo_dark"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dip"
+            android:drawablePadding="5dip"
+            android:text="@string/lock_setting_edit_short_cut_title"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="3dip"
+            android:orientation="horizontal" >
+
+            <Switch
+                android:id="@+id/short_cut_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:checked="true" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top_view"
+        android:layout_marginLeft="16dip"
+        android:layout_marginTop="40dip"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/edit_short_cut_alert_one"
+            android:textColor="#f3f3f3"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dip"
+            android:text="@string/edit_short_cut_alert_two"
+            android:textColor="#bebebe"
+            android:textSize="17sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/edit_short_cut_alert_three"
+            android:textColor="#bebebe"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/short_cut_trash"
+        android:layout_width="match_parent"
+        android:layout_height="55dip"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/kg_widget_delete_drop_target_bg"
+        android:drawableTop="@drawable/kg_widget_delete_drop_target_trashcan"
+        android:gravity="center_horizontal"
+        android:text="@string/delete"
+        android:visibility="invisible" />
+
+    <FrameLayout
+        android:id="@+id/lock_shortcut_app"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+
+        <com.huanghua.apps.SamsungShortCutIcon
+            android:id="@+id/lock_app_1"
+            android:layout_width="@dimen/lock_icon_back_size"
+            android:layout_height="@dimen/lock_icon_back_size"
+            android:contentDescription="@string/action_settings" />
+
+        <com.huanghua.apps.SamsungShortCutIcon
+            android:id="@+id/lock_app_2"
+            android:layout_width="@dimen/lock_icon_back_size"
+            android:layout_height="@dimen/lock_icon_back_size"
+            android:contentDescription="@string/action_settings" />
+
+        <com.huanghua.apps.SamsungShortCutIcon
+            android:id="@+id/lock_app_3"
+            android:layout_width="@dimen/lock_icon_back_size"
+            android:layout_height="@dimen/lock_icon_back_size"
+            android:contentDescription="@string/action_settings" />
+
+        <com.huanghua.apps.SamsungShortCutIcon
+            android:id="@+id/lock_app_4"
+            android:layout_width="@dimen/lock_icon_back_size"
+            android:layout_height="@dimen/lock_icon_back_size"
+            android:contentDescription="@string/action_settings" />
+
+        <com.huanghua.apps.SamsungShortCutIcon
+            android:id="@+id/lock_app_5"
+            android:layout_width="@dimen/lock_icon_back_size"
+            android:layout_height="@dimen/lock_icon_back_size"
+            android:contentDescription="@string/action_settings" />
+
+        <ImageView
+            android:id="@+id/lock_app_add"
+            android:layout_width="@dimen/lock_icon_back_size"
+            android:layout_height="@dimen/lock_icon_back_size"
+            android:background="@drawable/tw_list_icon_create"
+            android:clickable="true"
+            android:contentDescription="@string/action_settings" />
+
+        <ImageView
+            android:id="@+id/lock_app_sort_cursor"
+            android:layout_width="wrap_content"
+            android:layout_height="52dip"
+            android:background="@drawable/text_cursor"
+            android:contentDescription="@string/action_settings"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</RelativeLayout>

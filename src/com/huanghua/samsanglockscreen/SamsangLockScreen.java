@@ -43,6 +43,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
@@ -56,7 +57,6 @@ import android.widget.TextView;
 import com.huanghua.rs.FallView;
 
 import java.io.File;
-import java.lang.reflect.TypeVariable;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 
@@ -235,7 +235,15 @@ class SamsangLockScreen extends LinearLayout {
 
     private static final int NUM_OF_ICONS = 5;
     private ImageView mLockShortcutApps[];
+    private View mShortCutLayout;
     private int mIconsBackSize;
+    private static float sScreenDensity;
+    private Bitmap mOutlineBitmap = null;
+    private Drawable mTouchViewDrawable = null;
+    private int mTouchShortCutIndex = -1;
+    private HolographicOutlineHelper mOutlineHelper = null;
+    private int mNumOfIcons = NUM_OF_ICONS;
+    private final Rect mTempRect = new Rect();
     private int[] mShortcutAppsIds = {
             R.id.lock_app_1,
             R.id.lock_app_2,
@@ -251,12 +259,14 @@ class SamsangLockScreen extends LinearLayout {
             "samsunglockscreen_shortcut_app_activity5",
     };
     final String mSettingDefaultStrings[] = {
-            "com.android.contacts", "com.android.email", "com.android.browser", "com.android.mms", "com.huanghua.samsanglockscreen",
+            "com.android.contacts", "com.android.mms", "com.android.email", "com.android.browser",
+            "com.huanghua.samsanglockscreen",
     };
 
     final String mSettingDefaultStrings2[] = {
-            "com.android.contacts.activities.DialtactsActivity", "com.android.email.activity.Welcome",
-            "com.android.browser.BrowserActivity", "com.android.mms.ui.BootActivity","com.huanghua.samsanglockscreen.MainActivity",
+            "com.android.contacts.activities.DialtactsActivity", "com.android.mms.ui.BootActivity",
+            "com.android.email.activity.Welcome",
+            "com.android.browser.BrowserActivity", "com.huanghua.samsanglockscreen.MainActivity",
     };
 
     public SamsangLockScreen(Context context) {
@@ -307,7 +317,9 @@ class SamsangLockScreen extends LinearLayout {
                             }
                             break;
                         case MSG_UNLOCK_DELAYED:
-                            gotoUnlockAction(mIconTouchedIndex);
+                            if (mTouchShortCutIndex != -1) {
+                                gotoUnlockAction(mTouchShortCutIndex);
+                            }
                             System.exit(0);
                             break;
                         case MSG_FLARE_HIDE_DELAYED:
@@ -335,9 +347,9 @@ class SamsangLockScreen extends LinearLayout {
          * mUpdateMonitor, mLockPatternUtils, mCallback, false);
          */
 
-        //setFocusable(true);
-        //setFocusableInTouchMode(true);
-        //setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
+        // setFocusable(true);
+        // setFocusableInTouchMode(true);
+        // setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
 
         DisplayMetrics dm = getResources().getDisplayMetrics();
         WallpaperManager wm = WallpaperManager.getInstance(context);
@@ -354,7 +366,9 @@ class SamsangLockScreen extends LinearLayout {
             localCanvas.setBitmap(mBitmap);
             localCanvas.drawBitmap(WallpaperBitmap, 0, 0, null);
         }
-        
+        mScreenWidth = dm.widthPixels;
+        mScreenHeight = dm.heightPixels;
+
         mCarrierView = (TextView) findViewById(R.id.carrier);
         mCarrierGeminiView = (TextView) findViewById(R.id.carrierGemini);
         mCarrierDivider = (TextView) findViewById(R.id.carrierDivider);
@@ -400,8 +414,8 @@ class SamsangLockScreen extends LinearLayout {
         initMissedMsg();
         playSoundsInit(context);
         flareInit();
-        //mWaterlayout = (FrameLayout) findViewById(R.id.waterlayout);
-        //mFallView = (FallView) mWaterlayout.findViewById(R.id.fall_view);
+        // mWaterlayout = (FrameLayout) findViewById(R.id.waterlayout);
+        // mFallView = (FallView) mWaterlayout.findViewById(R.id.fall_view);
         if (mIsFallRs) {
             // mWaterlayout.setVisibility(View.VISIBLE);
         } else {
@@ -410,19 +424,39 @@ class SamsangLockScreen extends LinearLayout {
         mLogoText = (TextView) findViewById(R.id.logo);
         setBackgroundColor(0x00000000);
 
-        mIconsBackSize =  getResources().getDimensionPixelSize(
+        mIconsBackSize = getResources().getDimensionPixelSize(
                 R.dimen.lock_icon_back_size);
         mLockShortcutApps = new ImageView[NUM_OF_ICONS];
+        for (int i = 0; i < NUM_OF_ICONS; i++) {
+            mLockShortcutApps[i] = (ImageView) findViewById(mShortcutAppsIds[i]);
+        }
+        mShortCutLayout = findViewById(R.id.lock_shortcut_app);
+        sScreenDensity = getResources().getDisplayMetrics().density;
+        mOutlineHelper = new HolographicOutlineHelper();
+    }
+
+    private void setIconLocation() {
+        boolean isShow = getShortCutShow();
+        mNumOfIcons = getShortCutNum();
+        if (!isShow) {
+            mShortCutLayout.setVisibility(View.GONE);
+            return;
+        } else {
+            mShortCutLayout.setVisibility(View.VISIBLE);
+        }
         int left;
         ViewGroup.MarginLayoutParams mlp;
         String uri;
-        final PackageManager pm = context.getPackageManager();
+        final PackageManager pm = mContext.getPackageManager();
         Drawable d2;
-        for (int i = 0; i < NUM_OF_ICONS; i++) {
-            mLockShortcutApps[i] = (ImageView) findViewById(mShortcutAppsIds[i]);
-            left = (dm.widthPixels - NUM_OF_ICONS * mIconsBackSize) / (NUM_OF_ICONS + 1);
+        for (int i = 5; i > mNumOfIcons; i--) {
+            mLockShortcutApps[i - 1].setVisibility(View.GONE);
+        }
+        for (int i = 0; i < mNumOfIcons; i++) {
+            left = getLeftMargins(i, mNumOfIcons);
             mlp = (ViewGroup.MarginLayoutParams) mLockShortcutApps[i].getLayoutParams();
             mlp.setMargins(left, 0, 0, 0);
+            mLockShortcutApps[i].setVisibility(View.VISIBLE);
             uri = getShortCutAppUri(mSettingKeyStrings[i]);
             try {
                 Intent intent;
@@ -443,11 +477,149 @@ class SamsangLockScreen extends LinearLayout {
                     d2 = info.loadIcon(pm);
                     mLockShortcutApps[i].setTag(intent);
                     mLockShortcutApps[i].setImageDrawable(d2);
+                    mLockShortcutApps[i].setOnTouchListener(mLockShortCutTouchListener);
                 }
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             } catch (ActivityNotFoundException e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    private int getLeftMargins(int index, int num) {
+        int result = 30;
+        if (index == 0) {
+            if (num == 5 || num == 4) {
+                result = (mScreenWidth - num * mIconsBackSize) / (num + 1);
+                result = (mScreenWidth - mIconsBackSize * num - result * (num - 1)) / 2;
+            } else {
+                result = (mScreenWidth - NUM_OF_ICONS * mIconsBackSize) / (NUM_OF_ICONS + 1) + 40;
+                result = (mScreenWidth - mIconsBackSize * num - result * (num - 1)) / 2;
+            }
+        } else {
+            if (num == 5 || num == 4) {
+                result = (mScreenWidth - num * mIconsBackSize) / (num + 1);
+            } else {
+                result = (mScreenWidth - NUM_OF_ICONS * mIconsBackSize) / (NUM_OF_ICONS + 1) + 40;
+            }
+        }
+        return result;
+    }
+
+    public static float getScreenDensity() {
+        return sScreenDensity;
+    }
+
+    private OnTouchListener mLockShortCutTouchListener = new OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            ImageView mTouchView = (ImageView) v;
+            int action = event.getAction();
+            switch (action) {
+                case MotionEvent.ACTION_DOWN:
+                    setLockShortcutVisibility(mTouchView, View.INVISIBLE);
+                    final Canvas canvas = new Canvas();
+                    mOutlineBitmap = createDragOutline(mTouchView, canvas, 0);
+                    mTouchViewDrawable = mTouchView.getDrawable();
+                    mTouchView.setBackgroundDrawable(new BitmapDrawable(mOutlineBitmap));
+                    mTouchView.setScaleX(0.95f);
+                    mTouchView.setScaleY(0.95f);
+                    mTouchView.setAlpha(0.7f);
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    if (mMoveDistance > 135) {
+                        mTouchView.setImageDrawable(null);
+                        Drawable bg = mTouchView.getBackground();
+                        bg.setAlpha((int) (255 - mMoveDistance));
+                    } else {
+                        if (mTouchViewDrawable != null) {
+                            mTouchView.setImageDrawable(mTouchViewDrawable);
+                        }
+                        Drawable bg = mTouchView.getBackground();
+                        bg.setAlpha(255);
+                    }
+                    break;
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    mTouchView.setImageDrawable(mTouchViewDrawable);
+                    mTouchView.setBackgroundDrawable(null);
+                    if (mOutlineBitmap != null) {
+                        mOutlineBitmap.recycle();
+                        mOutlineBitmap = null;
+                    }
+                    setLockShortcutVisibility(mTouchView, View.VISIBLE);
+                    mTouchView.setScaleX(1f);
+                    mTouchView.setScaleY(1f);
+                    mTouchView.setAlpha(1f);
+                    mTouchView = null;
+                    mTouchShortCutIndex = -1;
+                    break;
+            }
+            onTouchEvent(event);
+            return true;
+        }
+    };
+
+    private Bitmap createDragOutline(View v, Canvas canvas, int padding) {
+        final int outlineColor = Color.WHITE;
+
+        final Bitmap b = Bitmap.createBitmap(
+                v.getWidth() + padding, v.getHeight() + padding, Bitmap.Config.ARGB_8888);
+
+        canvas.setBitmap(b);
+        drawDragView(v, canvas, padding, true);
+        mOutlineHelper.applyMediumExpensiveOutlineWithBlur(b, canvas, outlineColor, outlineColor);
+        canvas.setBitmap(null);
+        return b;
+    }
+
+    private void drawDragView(View v, Canvas destCanvas, int padding, boolean pruneToDrawable) {
+        final Rect clipRect = mTempRect;
+        v.getDrawingRect(clipRect);
+
+        destCanvas.save();
+        Drawable d = ((ImageView) v).getDrawable();
+        clipRect.set(0, 0, d.getIntrinsicWidth() + padding, d.getIntrinsicHeight() + padding);
+        // destCanvas.translate(padding / 2, padding / 2);
+        d.draw(destCanvas);
+        destCanvas.restore();
+    }
+
+    private void setLockShortcutVisibility(final View notView, final int visible) {
+        int from = 1;
+        int to = 0;
+        if (visible == View.VISIBLE) {
+            from = 0;
+            to = 1;
+        }
+        AlphaAnimation aa = new AlphaAnimation(from, to);
+        aa.setDuration(250);
+        aa.setFillAfter(true);
+        aa.setAnimationListener(new AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                for (int i = 0; i < mNumOfIcons; i++) {
+                    if (mLockShortcutApps[i] != notView) {
+                        mLockShortcutApps[i].setVisibility(visible);
+                        mLockShortcutApps[i].clearAnimation();
+                    }
+                }
+            }
+        });
+        for (int i = 0; i < mNumOfIcons; i++) {
+            if (mLockShortcutApps[i] != notView) {
+                mLockShortcutApps[i].startAnimation(aa);
+            } else {
+                mTouchShortCutIndex = i;
             }
         }
     }
@@ -557,7 +729,7 @@ class SamsangLockScreen extends LinearLayout {
                     }
                 } else {
                     if (mIsFallRs) {
-                        //mFallView.onMyTouchEvent(event);
+                        // mFallView.onMyTouchEvent(event);
                         mMoveDistance = 0.0D;
                     } else {
                         mMoveDistance = 0.0D;
@@ -588,7 +760,7 @@ class SamsangLockScreen extends LinearLayout {
                     }
                 } else {
                     mMoveDistance = Math.sqrt(Math.pow(mMoveX, 2.0D) + Math.pow(mMoveY, 2.0D));
-                    if (mMoveDistance >= 300) {
+                    if (mMoveDistance >= 251) {
                         flareUnlock();
                     } else if (mFlareShadowAreaTouched) {
                         if (!(x > TOUCH_ICON_RECT[TOUCH_FLARE_SHADOW][0]
@@ -597,7 +769,7 @@ class SamsangLockScreen extends LinearLayout {
                             flareUnlock();
                         } else {
                             if (mIsFallRs) {
-                                //mFallView.onMyTouchEvent(event);
+                                // mFallView.onMyTouchEvent(event);
                             } else {
                                 flareMove(x, y);
                                 hoverMove(x, y);
@@ -605,7 +777,7 @@ class SamsangLockScreen extends LinearLayout {
                         }
                     } else {
                         if (mIsFallRs) {
-                            //mFallView.onMyTouchEvent(event);
+                            // mFallView.onMyTouchEvent(event);
                         } else {
                             flareMove(x, y);
                             hoverMove(x, y);
@@ -625,7 +797,7 @@ class SamsangLockScreen extends LinearLayout {
                     }
                 } else {
                     if (mIsFallRs) {
-                        //mFallView.onMyTouchEvent(event);
+                        // mFallView.onMyTouchEvent(event);
                     }
                     mMoveDistance = Math.sqrt(Math.pow(mMoveX, 2.0D) + Math.pow(mMoveY, 2.0D));
                     if (mMoveUnlock) {
@@ -681,15 +853,9 @@ class SamsangLockScreen extends LinearLayout {
     }
 
     public void gotoUnlockAction(int mIndex) {
-        switch (mIndex) {
-            case TOUCH_ICON_MISSED_PHONE:
-                goToMissedPhoneAction();
-                break;
-
-            case TOUCH_ICON_MISSED_SMS:
-                goToSmsAction();
-                break;
-        }
+        Intent intent = (Intent) mLockShortcutApps[mIndex].getTag();
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+        getContext().startActivity(intent);
     }
 
     private void playSoundsInit(Context paramContext)
@@ -1678,7 +1844,7 @@ class SamsangLockScreen extends LinearLayout {
     }
 
     public void switchLockEffect(int effect) {
-        //mIsFallRs = effect == 0 ? true : false;
+        // mIsFallRs = effect == 0 ? true : false;
         mIsFallRs = false;
         if (mIsFallRs) {
             // mWaterlayout.setVisibility(View.VISIBLE);
@@ -1720,12 +1886,23 @@ class SamsangLockScreen extends LinearLayout {
         spd.commit();
     }
 
+    private int getShortCutNum() {
+        SharedPreferences sp = mContext.getSharedPreferences("samsung_lock", Context.MODE_PRIVATE);
+        return sp.getInt("samsunglockscreen_shortcut_app_num", NUM_OF_ICONS);
+    }
+
+    private boolean getShortCutShow() {
+        SharedPreferences sp = mContext.getSharedPreferences("samsung_lock", Context.MODE_PRIVATE);
+        return sp.getInt("samsunglockscreen_shortcut_app_show", 0) == 1 ? true : false;
+    }
+
     public void onResume() {
         if (mLogoText != null) {
             mLogoText.setText(getLogoText());
             mLogoText.setTextSize(TypedValue.COMPLEX_UNIT_SP, getLogoTextSize());
             mLogoText.setTextColor(getLogoTextColor());
-            //mLogoText.setBackgroundColor(getLogoTextBgColor());
+            setIconLocation();
+            // mLogoText.setBackgroundColor(getLogoTextBgColor());
         }
     }
 }

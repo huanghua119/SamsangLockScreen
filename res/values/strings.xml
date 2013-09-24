@@ -22,6 +22,14 @@
     <string name="store">存储</string>
     <string name="add_apps">添加应用程序</string>
     <string name="samsung_apps">常用应用程序</string>
+    <string name="lock_setting_edit_short_cut">设置屏幕锁定时的快捷键</string>
+    <string name="short_cut">快捷键</string>
+    <string name="lock_setting_edit_short_cut_title">设置快捷方式</string>
+    <string name="edit_short_cut_alert_one">设置屏幕锁定时的快捷键</string>
+    <string name="edit_short_cut_alert_two">点击快捷方式分配应用程序.</string>
+    <string name="edit_short_cut_alert_three">拖放以删除或更改顺序</string>
+    <string name="delete">删除</string>
+    <string name="select_apps">选择应用程序</string>
     <!-- mtek add end -->
 
 </resources>

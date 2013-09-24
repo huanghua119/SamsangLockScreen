@@ -11,6 +11,14 @@
                 android:targetClass="com.huanghua.samsanglockscreen.LockScreenEditInfo"
                 android:targetPackage="com.huanghua.samsanglockscreen" />
         </PreferenceScreen>
+        <PreferenceScreen
+            android:key="lock_setting_edit_shortcut"
+            android:title="@string/short_cut"
+            android:summary="@string/lock_setting_edit_short_cut" >
+            <intent
+                android:targetClass="com.huanghua.samsanglockscreen.LockScreenEditShortCutApp"
+                android:targetPackage="com.huanghua.samsanglockscreen" />
+        </PreferenceScreen>
     </PreferenceCategory>
 
 </PreferenceScreen>
