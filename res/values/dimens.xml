@@ -45,4 +45,5 @@
     <dimen name="port_label_height">34.0dip</dimen>
     <dimen name="port_label_text_size">14.0dip</dimen>
     <dimen name="lock_icon_back_size">48dip</dimen>
+    <dimen name="lock_icon_back_size2">55dip</dimen>
 </resources>

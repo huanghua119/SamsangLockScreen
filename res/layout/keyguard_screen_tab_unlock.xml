@@ -469,6 +469,12 @@
             android:contentDescription="@string/action_settings" />
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/lock_app_shadow"
+        android:layout_width="@dimen/lock_icon_back_size2"
+        android:layout_height="@dimen/lock_icon_back_size2"
+        android:contentDescription="@string/action_settings" />
+
     <FrameLayout
         android:id="@+id/flareframelayout"
         android:layout_width="match_parent"

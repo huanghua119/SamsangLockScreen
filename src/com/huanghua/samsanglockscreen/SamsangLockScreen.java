@@ -18,13 +18,16 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.RadialGradient;
 import android.graphics.Rect;
+import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
@@ -240,6 +243,7 @@ class SamsangLockScreen extends LinearLayout {
     private static float sScreenDensity;
     private Bitmap mOutlineBitmap = null;
     private Drawable mTouchViewDrawable = null;
+    private ImageView mLockAppShadow;
     private int mTouchShortCutIndex = -1;
     private HolographicOutlineHelper mOutlineHelper = null;
     private int mNumOfIcons = NUM_OF_ICONS;
@@ -431,6 +435,7 @@ class SamsangLockScreen extends LinearLayout {
             mLockShortcutApps[i] = (ImageView) findViewById(mShortcutAppsIds[i]);
         }
         mShortCutLayout = findViewById(R.id.lock_shortcut_app);
+        mLockAppShadow = (ImageView) findViewById(R.id.lock_app_shadow);
         sScreenDensity = getResources().getDisplayMetrics().density;
         mOutlineHelper = new HolographicOutlineHelper();
     }
@@ -511,6 +516,30 @@ class SamsangLockScreen extends LinearLayout {
         return sScreenDensity;
     }
 
+    private int[] mOffsetXY = new int[2];
+
+    public Bitmap getShadow(Bitmap bitmap) {
+        BlurMaskFilter blurFilter = new BlurMaskFilter(10,
+                BlurMaskFilter.Blur.OUTER);
+        Paint p = new Paint();
+        p.setMaskFilter(blurFilter);
+        Bitmap shadowBitmap = bitmap.extractAlpha(p, mOffsetXY);
+        int width = shadowBitmap.getWidth();
+        int height = shadowBitmap.getHeight();
+        Bitmap shadowImage = Bitmap.createBitmap(width, height,
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(shadowImage);
+
+        Paint paint = new Paint();
+        // Shader shader = new RadialGradient(50, 0, 1480, new int[] {
+        // Color.TRANSPARENT, Color.GREEN }, null, Shader.TileMode.REPEAT);
+        // paint.setShader(shader);
+
+        paint.setColor(Color.WHITE);
+        canvas.drawBitmap(shadowBitmap, 0, 0, paint);
+        return shadowImage;
+    }
+
     private OnTouchListener mLockShortCutTouchListener = new OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -519,41 +548,60 @@ class SamsangLockScreen extends LinearLayout {
             switch (action) {
                 case MotionEvent.ACTION_DOWN:
                     setLockShortcutVisibility(mTouchView, View.INVISIBLE);
-                    final Canvas canvas = new Canvas();
-                    mOutlineBitmap = createDragOutline(mTouchView, canvas, 0);
                     mTouchViewDrawable = mTouchView.getDrawable();
-                    mTouchView.setBackgroundDrawable(new BitmapDrawable(mOutlineBitmap));
+                    mOutlineBitmap = getShadow(((BitmapDrawable) mTouchViewDrawable).getBitmap());
+                    mLockAppShadow.setBackgroundDrawable(new BitmapDrawable(mOutlineBitmap));
+
+                    int[] screenLocation = new int[2];
+                    mTouchView.getLocationOnScreen(screenLocation);
+                    screenLocation[0] = screenLocation[0] + mTouchView.getWidth() / 2
+                            - mLockAppShadow.getWidth() / 2;
+                    screenLocation[1] = screenLocation[1] + mTouchView.getHeight() / 2
+                            - mLockAppShadow.getHeight() / 2 - 38;
+                    mLockAppShadow.setX(screenLocation[0]);
+                    mLockAppShadow.setY(screenLocation[1]);
+                    mLockAppShadow.setVisibility(View.VISIBLE);
                     mTouchView.setScaleX(0.95f);
                     mTouchView.setScaleY(0.95f);
                     mTouchView.setAlpha(0.7f);
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    if (mMoveDistance > 135) {
+                    if (mMoveDistance > 130) {
                         mTouchView.setImageDrawable(null);
-                        Drawable bg = mTouchView.getBackground();
-                        bg.setAlpha((int) (255 - mMoveDistance));
+                        int alpha = (int) (255 - (255 / (240 - 130)) * (mMoveDistance - 130));
+                        if (alpha <= 0) {
+                            alpha = 0;
+                        }
+                        Drawable bg = mLockAppShadow.getBackground();
+                        bg.setAlpha(alpha);
                     } else {
                         if (mTouchViewDrawable != null) {
                             mTouchView.setImageDrawable(mTouchViewDrawable);
                         }
-                        Drawable bg = mTouchView.getBackground();
+                        Drawable bg = mLockAppShadow.getBackground();
                         bg.setAlpha(255);
                     }
                     break;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
+                    mTouchViewDrawable.setAlpha(255);
                     mTouchView.setImageDrawable(mTouchViewDrawable);
-                    mTouchView.setBackgroundDrawable(null);
+                    mLockAppShadow.setBackgroundDrawable(null);
+                    mLockAppShadow.setVisibility(View.GONE);
                     if (mOutlineBitmap != null) {
                         mOutlineBitmap.recycle();
                         mOutlineBitmap = null;
                     }
-                    setLockShortcutVisibility(mTouchView, View.VISIBLE);
-                    mTouchView.setScaleX(1f);
-                    mTouchView.setScaleY(1f);
-                    mTouchView.setAlpha(1f);
-                    mTouchView = null;
-                    mTouchShortCutIndex = -1;
+                    if (mMoveDistance > 240) {
+                        flareUnlock();
+                    } else {
+                        setLockShortcutVisibility(mTouchView, View.VISIBLE);
+                        mTouchView.setScaleX(1f);
+                        mTouchView.setScaleY(1f);
+                        mTouchView.setAlpha(1f);
+                        mTouchView = null;
+                        mTouchShortCutIndex = -1;
+                    }
                     break;
             }
             onTouchEvent(event);
@@ -655,7 +703,6 @@ class SamsangLockScreen extends LinearLayout {
         if (mBitmap != null) {
             canvas.drawBitmap(mBitmap, 0, 0 - mStatusBarHeight,
                     null);
-            postInvalidate();
         }
     }
 
