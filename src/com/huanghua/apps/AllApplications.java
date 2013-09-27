@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,7 +87,7 @@ public class AllApplications extends Activity implements OnItemClickListener {
         List<ResolveInfo> apps = null;
         mAppApps = new ArrayList<ApplicationInfo>();
 
-        apps = packageManager.queryIntentActivities(mainIntent, PackageManager.MATCH_DEFAULT_ONLY);
+        apps = packageManager.queryIntentActivities(mainIntent, PackageManager.PERMISSION_GRANTED);
 
         if (apps == null) {
             return;
