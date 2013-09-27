@@ -38,6 +38,7 @@ import java.util.ArrayList;
 public class LockScreenEditShortCutApp extends Activity implements OnClickListener,
         OnCheckedChangeListener {
 
+    private static final int NUM_OF_ICON = 5;
     private SamsungShortCutIcon mLockShortcutApps[];
     private ImageView mAddShortCut;
     private ImageView mSortCursor;
@@ -45,7 +46,7 @@ public class LockScreenEditShortCutApp extends Activity implements OnClickListen
     private Switch mShortSwitch;
     private int mScreenWidth;
     private int mScreenHeight;
-    private int mNumOfIcons = 5;
+    private int mNumOfIcons = NUM_OF_ICON;
     private int mLongClickShortIndex = -1;
     private int mIconsBackSize;
     private int mCursorX;
@@ -119,13 +120,13 @@ public class LockScreenEditShortCutApp extends Activity implements OnClickListen
         mIconsBackSize = getResources().getDimensionPixelSize(
                 R.dimen.lock_icon_back_size);
         mTrash = (TextView) findViewById(R.id.short_cut_trash);
-        mLockShortcutApps = new SamsungShortCutIcon[5];
+        mLockShortcutApps = new SamsungShortCutIcon[NUM_OF_ICON];
         mAddShortCut = (ImageView) findViewById(R.id.lock_app_add);
         mAddShortCut.setOnClickListener(this);
         mShortSwitch = (Switch) findViewById(R.id.short_cut_switch);
         mShortSwitch.setOnCheckedChangeListener(this);
         mSortCursor = (ImageView) findViewById(R.id.lock_app_sort_cursor);
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < NUM_OF_ICON; i++) {
             mLockShortcutApps[i] = (SamsungShortCutIcon) findViewById(mShortcutAppsIds[i]);
             mLockShortcutApps[i].setOnTouchListener(mLockShortCutTouchListener);
         }
@@ -150,10 +151,10 @@ public class LockScreenEditShortCutApp extends Activity implements OnClickListen
         String uri;
         final PackageManager pm = getPackageManager();
         Drawable d2;
-        mAddShortCut.setVisibility(mNumOfIcons == 5 ? View.GONE : View.VISIBLE);
+        mAddShortCut.setVisibility(mNumOfIcons == NUM_OF_ICON ? View.GONE : View.VISIBLE);
         for (int i = 0; i < getShowIconNum(); i++) {
             left = left + (i == 0 ? 0 : mIconsBackSize) + getLeftMargins(i, getShowIconNum());
-            if (i == mNumOfIcons && mNumOfIcons < 5) {
+            if (i == mNumOfIcons && mNumOfIcons < NUM_OF_ICON) {
                 mAddShortCut.setX(left);
                 mAddShortCut.setY(mScreenHeight / 2 - mIconsBackSize);
                 if (mAddShortCut.getAnimation() != null) {
@@ -194,7 +195,7 @@ public class LockScreenEditShortCutApp extends Activity implements OnClickListen
                 }
             }
         }
-        for (int i = 5; i > mNumOfIcons; i--) {
+        for (int i = NUM_OF_ICON; i > mNumOfIcons; i--) {
             mLockShortcutApps[i - 1].setVisibility(View.GONE);
             if (mLockShortcutApps[i - 1].getAnimation() != null) {
                 mLockShortcutApps[i - 1].clearAnimation();
@@ -214,7 +215,7 @@ public class LockScreenEditShortCutApp extends Activity implements OnClickListen
                 iconMoveAnimation(mLockShortcutApps[i + 1], left);
             }
         }
-        if (showIconNum < 5) {
+        if (showIconNum < NUM_OF_ICON) {
             for (int i = mLongClickShortIndex; i >= 0; i--) {
                 if (i > 0) {
                     left = getLeftMargins2(i - 1, showIconNum);
@@ -222,7 +223,7 @@ public class LockScreenEditShortCutApp extends Activity implements OnClickListen
                 }
             }
         }
-        if (mNumOfIcons < 5
+        if (mNumOfIcons < NUM_OF_ICON
                 && (mAddShortCut.getVisibility() == View.GONE || mAddShortCut.getVisibility() == View.INVISIBLE)) {
             setViewVisibility(mAddShortCut, View.VISIBLE);
         }
@@ -311,13 +312,13 @@ public class LockScreenEditShortCutApp extends Activity implements OnClickListen
     private int getLeftMargins(int index, int num) {
         int result = mIconMargins;
         if (index == 0) {
-            if (num == 5) {
+            if (num == NUM_OF_ICON) {
                 result = (mScreenWidth - mIconsBackSize * num - mIconMargins * (num - 1)) / 2;
             } else {
                 result = (mScreenWidth - mIconsBackSize * num - (mIconMargins + 15) * (num - 1)) / 2;
             }
         } else {
-            if (num == 5) {
+            if (num == NUM_OF_ICON) {
                 result = mIconMargins;
             } else {
                 result = mIconMargins + 15;
@@ -327,7 +328,7 @@ public class LockScreenEditShortCutApp extends Activity implements OnClickListen
     }
 
     private int getShowIconNum() {
-        return (mNumOfIcons < 5 ? mNumOfIcons + 1 : mNumOfIcons);
+        return (mNumOfIcons < NUM_OF_ICON ? mNumOfIcons + 1 : mNumOfIcons);
     }
 
     private String getShortCutAppUri(String id) {
@@ -344,7 +345,7 @@ public class LockScreenEditShortCutApp extends Activity implements OnClickListen
 
     private int getShortCutNum() {
         SharedPreferences sp = getSharedPreferences("samsung_lock", Context.MODE_PRIVATE);
-        return sp.getInt("samsunglockscreen_shortcut_app_num", 5);
+        return sp.getInt("samsunglockscreen_shortcut_app_num", NUM_OF_ICON);
     }
 
     private void setShortCutNum(int num) {
@@ -506,7 +507,7 @@ public class LockScreenEditShortCutApp extends Activity implements OnClickListen
         mTrash.setCompoundDrawables(null, drawable,
                 null, null);
         mTrash.setVisibility(View.INVISIBLE);
-        for (int i = 0; i < mNumOfIcons; i++) {
+        for (int i = 0; i < NUM_OF_ICON; i++) {
             mLockShortcutApps[i].isHoveringOverDeleteDropTarget(false);
             mLockShortcutApps[i].setCanSort(false);
         }
@@ -549,7 +550,7 @@ public class LockScreenEditShortCutApp extends Activity implements OnClickListen
                 right = (int) mLockShortcutApps[i].getX();
                 left = right - 20;
             } else if (i == mNumOfIcons) {
-                if (mNumOfIcons != 5) {
+                if (mNumOfIcons != NUM_OF_ICON) {
                     left = (int) mLockShortcutApps[mNumOfIcons - 1].getX()
                             + mLockShortcutApps[mNumOfIcons - 1].getWidth();
                     right = (int) mAddShortCut.getX();
@@ -618,7 +619,7 @@ public class LockScreenEditShortCutApp extends Activity implements OnClickListen
     }
 
     private void enabledShortCut(boolean enabled) {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < NUM_OF_ICON; i++) {
             mLockShortcutApps[i].setEnabled(enabled);
             mLockShortcutApps[i].setAlpha(enabled ? 1 : 0.6f);
         }
@@ -627,7 +628,7 @@ public class LockScreenEditShortCutApp extends Activity implements OnClickListen
     }
 
     private void setClickShortIndex(View v) {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < NUM_OF_ICON; i++) {
             if (v == mLockShortcutApps[i]) {
                 mLongClickShortIndex = i;
                 break;

@@ -20,9 +20,9 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:drawableLeft="@drawable/tw_action_bar_icon_holo_dark"
+            android:drawablePadding="5dip"
             android:gravity="center_vertical"
             android:paddingLeft="5dip"
-            android:drawablePadding="5dip"
             android:text="@string/lock_setting_edit_short_cut_title"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
@@ -39,8 +39,14 @@
                 android:id="@+id/short_cut_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:checked="true" />
+                android:layout_gravity="center"
+                android:clickable="true"
+                android:focusable="false"
+                android:padding="6dip"
+                android:textOff="@string/sx_switch_off"
+                android:textOn="@string/sx_switch_on"
+                android:thumb="@drawable/blank_bg"
+                android:track="@drawable/sx_switch_bg" />
         </LinearLayout>
     </RelativeLayout>
 

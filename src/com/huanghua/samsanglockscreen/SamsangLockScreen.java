@@ -584,6 +584,10 @@ class SamsangLockScreen extends LinearLayout {
                     break;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
+                    if (mMoveDistance > 240) {
+                        flareUnlock();
+                        return true;
+                    }
                     mTouchViewDrawable.setAlpha(255);
                     mTouchView.setImageDrawable(mTouchViewDrawable);
                     mLockAppShadow.setBackgroundDrawable(null);
@@ -592,16 +596,12 @@ class SamsangLockScreen extends LinearLayout {
                         mOutlineBitmap.recycle();
                         mOutlineBitmap = null;
                     }
-                    if (mMoveDistance > 240) {
-                        flareUnlock();
-                    } else {
-                        setLockShortcutVisibility(mTouchView, View.VISIBLE);
-                        mTouchView.setScaleX(1f);
-                        mTouchView.setScaleY(1f);
-                        mTouchView.setAlpha(1f);
-                        mTouchView = null;
-                        mTouchShortCutIndex = -1;
-                    }
+                    setLockShortcutVisibility(mTouchView, View.VISIBLE);
+                    mTouchView.setScaleX(1f);
+                    mTouchView.setScaleY(1f);
+                    mTouchView.setAlpha(1f);
+                    mTouchView = null;
+                    mTouchShortCutIndex = -1;
                     break;
             }
             onTouchEvent(event);
@@ -658,6 +658,7 @@ class SamsangLockScreen extends LinearLayout {
                 for (int i = 0; i < mNumOfIcons; i++) {
                     if (mLockShortcutApps[i] != notView) {
                         mLockShortcutApps[i].setVisibility(visible);
+                        mLockShortcutApps[i].setAlpha(255);
                         mLockShortcutApps[i].clearAnimation();
                     }
                 }

@@ -30,6 +30,8 @@
     <string name="edit_short_cut_alert_three">拖放以删除或更改顺序</string>
     <string name="delete">删除</string>
     <string name="select_apps">选择应用程序</string>
+    <string name="sx_switch_on">"       "</string>
+    <string name="sx_switch_off">"       "</string>
     <!-- mtek add end -->
 
 </resources>

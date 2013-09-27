@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:paddingRight="?android:attr/scrollbarSize" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:minWidth="0dp"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+android:id/icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="8dip"
+            android:minWidth="48dp"
+            android:scaleType="centerInside" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/custom_preference"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="14dip"
+        android:layout_marginRight="6dip"
+        android:layout_weight="1" >
+
+        <TextView
+            android:id="@+android:id/title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="?android:attr/textColorPrimary" />
+
+        <TextView
+            android:id="@+android:id/summary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+android:id/title"
+            android:layout_below="@+android:id/title"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <View
+                android:layout_width="1.0dip"
+                android:layout_height="fill_parent"
+                android:layout_marginBottom="14dip"
+                android:layout_marginRight="-5dip"
+                android:layout_marginTop="14dip"
+                android:background="#434343"
+                android:focusable="false" />
+
+            <Switch
+                android:id="@+id/switch_"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="-5dip"
+                android:clickable="false"
+                android:focusable="false"
+                android:gravity="center_vertical"
+                android:textOff="@string/sx_switch_off"
+                android:textOn="@string/sx_switch_on"
+                android:thumb="@drawable/blank_bg"
+                android:track="@drawable/sx_switch_bg" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
