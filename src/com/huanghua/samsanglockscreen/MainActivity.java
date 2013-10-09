@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
         switch (itemId) {
             case MENU_SETTINGS:
                 intent.setClass(this, LockScreenSetting.class);
-                //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                // intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 break;
             case MENU_LOCK_SWITCH:
@@ -66,6 +66,12 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         mSamaungLock.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mSamaungLock.onPause();
     }
 
     private void switchLock(int effect) {

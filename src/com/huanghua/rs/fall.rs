@@ -28,26 +28,6 @@ typedef struct Constants {
     float4 Drop08;
     float4 Drop09;
     float4 Drop10;
-    float4 Drop11;
-    float4 Drop12;
-    float4 Drop13;
-    float4 Drop14;
-    float4 Drop15;
-    float4 Drop16;
-    float4 Drop17;
-    float4 Drop18;
-    float4 Drop19;
-    float4 Drop20;
-    float4 Drop21;
-    float4 Drop22;
-    float4 Drop23;
-    float4 Drop24;
-    float4 Drop25;
-    float4 Drop26;
-    float4 Drop27;
-    float4 Drop28;
-    float4 Drop29;
-    float4 Drop30;
     float4 Offset;
     float Rotate;
 } Constants_t;
@@ -65,13 +45,13 @@ typedef struct Drop {
     float x;
     float y;
 } Drop_t;
-static Drop_t gDrops[30];
+static Drop_t gDrops[10];
 static int gMaxDrops;
 
 
 void init() {
     int ct;
-    gMaxDrops = 30;
+    gMaxDrops = 10;
     for (ct=0; ct<gMaxDrops; ct++) {
         gDrops[ct].ampS = 0;
         gDrops[ct].ampE = 0;

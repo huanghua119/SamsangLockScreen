@@ -190,7 +190,12 @@ class FallRS extends RenderScriptScene {
             localCanvas.setBitmap(mBitmap);
             localCanvas.drawBitmap(WallpaperBitmap, 0, 0, null);
         }
-        mScript.set_g_TRiverbed(loadTexture(mBitmap));
+        mScript.set_g_TRiverbed(loadTexture(R.drawable.pond));
+    }
+
+    private Allocation loadTexture(int id) {
+        final Allocation allocation = Allocation.createFromBitmapResource(mRS, mResources, id);
+        return allocation;
     }
 
     private Allocation loadTexture(Bitmap bitmap) {
@@ -235,64 +240,55 @@ class FallRS extends RenderScriptScene {
 
         ProgramVertex.Builder sb = new ProgramVertex.Builder(mRS);
 
-        String t = "\n" + "varying vec4 varColor;\n"
-                + "varying vec2 varTex0;\n" +
+        String t = "\n" +
+                "varying vec4 varColor;\n" +
+                "varying vec2 varTex0;\n" +
 
-                "vec2 addDrop(vec4 d, vec2 pos, float dxMul) {\n"
-                + "  vec2 ret = vec2(0.0, 0.0);\n"
-                + "  vec2 delta = d.xy - pos;\n" + "  delta.x *= dxMul;\n"
-                + "  float dist = length(delta);\n" + "  if (dist < d.w) { \n"
-                + "    float amp = d.z * dist;\n" + "    amp /= d.w * d.w;\n"
-                + "    amp *= sin(d.w - dist);\n" + "    ret = delta * amp;\n"
-                + "  }\n" + "  return ret;\n" + "}\n" +
+                "vec2 addDrop(vec4 d, vec2 pos, float dxMul) {\n" +
+                "  vec2 ret = vec2(0.0, 0.0);\n" +
+                "  vec2 delta = d.xy - pos;\n" +
+                "  delta.x *= dxMul;\n" +
+                "  float dist = length(delta);\n" +
+                "  if (dist < d.w) { \n" +
+                "    float amp = d.z * dist;\n" +
+                "    amp /= d.w * d.w;\n" +
+                "    amp *= sin(d.w - dist);\n" +
+                "    ret = delta * amp;\n" +
+                "  }\n" +
+                "  return ret;\n" +
+                "}\n" +
 
-                "void main() {\n" + "  vec2 pos = ATTRIB_position.xy;\n"
-                + "  gl_Position = vec4(pos.x, pos.y, 0.0, 1.0);\n"
-                + "  float dxMul = 1.0;\n" +
+                "void main() {\n" +
+                "  vec2 pos = ATTRIB_position.xy;\n" +
+                "  gl_Position = vec4(pos.x, pos.y, 0.0, 1.0);\n" +
+                "  float dxMul = 1.0;\n" +
 
-                "  varTex0 = vec2((pos.x + 1.0), (pos.y + 1.0));\n" +
+                "  varTex0 = vec2((pos.x + 1.0), (pos.y + 1.6666));\n" +
 
-                "  if (UNI_Rotate < 0.9) {\n"
-                + "    varTex0.xy *= vec2(0.50, 0.50);\n"
-                + "    varTex0.x += UNI_Offset.x * 0.5;\n"
-                + "    pos.x += UNI_Offset.x * 2.0;\n" + "  } else {\n"
-                + "    varTex0.xy *= vec2(0.5, 0.5);\n"
-                + "    dxMul = 2.5;\n" + "  }\n" +
+                "  if (UNI_Rotate < 0.9) {\n" +
+                "    varTex0.xy *= vec2(0.25, 0.33);\n" +
+                "    varTex0.x += UNI_Offset.x * 0.5;\n" +
+                "    pos.x += UNI_Offset.x * 2.0;\n" +
+                "  } else {\n" +
+                "    varTex0.xy *= vec2(0.5, 0.3125);\n" +
+                "    dxMul = 2.5;\n" +
+                "  }\n" +
 
-                "  varColor = vec4(1.0, 1.0, 1.0, 1.0);\n"
-                + "  pos.xy += vec2(1.0, 1.0);\n"
-                + "  pos.xy *= vec2(25.0, 42.0);\n" +
+                "  varColor = vec4(1.0, 1.0, 1.0, 1.0);\n" +
+                "  pos.xy += vec2(1.0, 1.0);\n" +
+                "  pos.xy *= vec2(25.0, 42.0);\n" +
 
-                "  varTex0.xy += addDrop(UNI_Drop01, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop02, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop03, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop04, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop05, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop06, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop07, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop08, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop09, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop10, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop11, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop12, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop13, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop14, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop15, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop16, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop17, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop18, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop19, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop20, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop21, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop22, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop23, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop24, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop25, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop26, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop27, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop28, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop29, pos, dxMul);\n"
-                + "  varTex0.xy += addDrop(UNI_Drop30, pos, dxMul);\n" + "}\n";
+                "  varTex0.xy += addDrop(UNI_Drop01, pos, dxMul);\n" +
+                "  varTex0.xy += addDrop(UNI_Drop02, pos, dxMul);\n" +
+                "  varTex0.xy += addDrop(UNI_Drop03, pos, dxMul);\n" +
+                "  varTex0.xy += addDrop(UNI_Drop04, pos, dxMul);\n" +
+                "  varTex0.xy += addDrop(UNI_Drop05, pos, dxMul);\n" +
+                "  varTex0.xy += addDrop(UNI_Drop06, pos, dxMul);\n" +
+                "  varTex0.xy += addDrop(UNI_Drop07, pos, dxMul);\n" +
+                "  varTex0.xy += addDrop(UNI_Drop08, pos, dxMul);\n" +
+                "  varTex0.xy += addDrop(UNI_Drop09, pos, dxMul);\n" +
+                "  varTex0.xy += addDrop(UNI_Drop10, pos, dxMul);\n" +
+                "}\n";
 
         sb.setShader(t);
         sb.addConstant(mUniformAlloc.getType());

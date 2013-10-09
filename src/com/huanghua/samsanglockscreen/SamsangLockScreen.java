@@ -328,7 +328,6 @@ class SamsangLockScreen extends LinearLayout {
                             break;
                         case MSG_FLARE_HIDE_DELAYED:
                             if (mIsFallRs) {
-
                             } else {
                                 flareHide();
                                 hoverExit();
@@ -418,12 +417,12 @@ class SamsangLockScreen extends LinearLayout {
         initMissedMsg();
         playSoundsInit(context);
         flareInit();
-        // mWaterlayout = (FrameLayout) findViewById(R.id.waterlayout);
-        // mFallView = (FallView) mWaterlayout.findViewById(R.id.fall_view);
+        mWaterlayout = (FrameLayout) findViewById(R.id.waterlayout);
+        mFallView = (FallView) mWaterlayout.findViewById(R.id.fall_view);
         if (mIsFallRs) {
-            // mWaterlayout.setVisibility(View.VISIBLE);
+            mWaterlayout.setVisibility(View.VISIBLE);
         } else {
-            // mWaterlayout.setVisibility(View.GONE);
+            mWaterlayout.setVisibility(View.GONE);
         }
         mLogoText = (TextView) findViewById(R.id.logo);
         setBackgroundColor(0x00000000);
@@ -777,8 +776,9 @@ class SamsangLockScreen extends LinearLayout {
                     }
                 } else {
                     if (mIsFallRs) {
-                        // mFallView.onMyTouchEvent(event);
+                        mFallView.onMyTouchEvent(event.getAction(), mDownX, mDownY);
                         mMoveDistance = 0.0D;
+                        playFallSoundsTouchDown();
                     } else {
                         mMoveDistance = 0.0D;
                         flareShow(mDownX, mDownY);
@@ -817,7 +817,7 @@ class SamsangLockScreen extends LinearLayout {
                             flareUnlock();
                         } else {
                             if (mIsFallRs) {
-                                // mFallView.onMyTouchEvent(event);
+                                mFallView.onMyTouchEvent(event.getAction(), mDownX, mDownY);
                             } else {
                                 flareMove(x, y);
                                 hoverMove(x, y);
@@ -825,7 +825,7 @@ class SamsangLockScreen extends LinearLayout {
                         }
                     } else {
                         if (mIsFallRs) {
-                            // mFallView.onMyTouchEvent(event);
+                            mFallView.onMyTouchEvent(event.getAction(), mDownX, mDownY);
                         } else {
                             flareMove(x, y);
                             hoverMove(x, y);
@@ -845,7 +845,7 @@ class SamsangLockScreen extends LinearLayout {
                     }
                 } else {
                     if (mIsFallRs) {
-                        // mFallView.onMyTouchEvent(event);
+                        mFallView.onMyTouchEvent(event.getAction(), mDownX, mDownY);
                     }
                     mMoveDistance = Math.sqrt(Math.pow(mMoveX, 2.0D) + Math.pow(mMoveY, 2.0D));
                     if (mMoveUnlock) {
@@ -919,6 +919,10 @@ class SamsangLockScreen extends LinearLayout {
                     Integer.valueOf(soundPool.load(paramContext, R.raw.down, 1)));
             hashMap.put(Integer.valueOf(2),
                     Integer.valueOf(soundPool.load(paramContext, R.raw.up, 1)));
+            hashMap.put(Integer.valueOf(3),
+                    Integer.valueOf(soundPool.load(paramContext, R.raw.lock_water, 1)));
+            hashMap.put(Integer.valueOf(4),
+                    Integer.valueOf(soundPool.load(paramContext, R.raw.unlock_water, 1)));
         }
     }
 
@@ -945,6 +949,14 @@ class SamsangLockScreen extends LinearLayout {
     private void playSoundsTouchUp() {
         if ((soundPool != null) && (hashMap != null)) {
             soundPool.play(((Integer) hashMap.get(Integer.valueOf(2))).intValue(), 7.0F, 7.0F, 0,
+                    0, 1.0F);
+        }
+    }
+
+    private void playFallSoundsTouchDown()
+    {
+        if ((soundPool != null) && (hashMap != null)) {
+            soundPool.play(((Integer) hashMap.get(Integer.valueOf(3))).intValue(), 10.0F, 10.0F, 0,
                     0, 1.0F);
         }
     }
@@ -1892,12 +1904,11 @@ class SamsangLockScreen extends LinearLayout {
     }
 
     public void switchLockEffect(int effect) {
-        // mIsFallRs = effect == 0 ? true : false;
-        mIsFallRs = false;
+        mIsFallRs = effect == 0 ? true : false;
         if (mIsFallRs) {
-            // mWaterlayout.setVisibility(View.VISIBLE);
+            mWaterlayout.setVisibility(View.VISIBLE);
         } else {
-            // mWaterlayout.setVisibility(View.GONE);
+            mWaterlayout.setVisibility(View.GONE);
         }
     }
 
@@ -1951,6 +1962,15 @@ class SamsangLockScreen extends LinearLayout {
             mLogoText.setTextColor(getLogoTextColor());
             setIconLocation();
             // mLogoText.setBackgroundColor(getLogoTextBgColor());
+        }
+        if (mFallView != null) {
+            mFallView.resume();
+        }
+    }
+
+    public void onPause() {
+        if (mFallView != null) {
+            mFallView.pause();
         }
     }
 }

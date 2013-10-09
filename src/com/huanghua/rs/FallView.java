@@ -90,17 +90,17 @@ public class FallView extends RSSurfaceView {
         return super.onTouchEvent(event);
     }*/
 
-    public void onMyTouchEvent(MotionEvent event) {
-        float currX = event.getX();
-        float currY = event.getY();
+    public void onMyTouchEvent(int action, float x, float y) {
+        float currX = x;
+        float currY = y;
 
-        switch (event.getAction()) {
+        switch (action) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
             case MotionEvent.ACTION_UP:
-                if ((event.getAction() == MotionEvent.ACTION_DOWN)
-                        || (event.getAction() == MotionEvent.ACTION_UP)
-                        || (event.getAction() == MotionEvent.ACTION_CANCEL)
+                if ((action == MotionEvent.ACTION_DOWN)
+                        || (action == MotionEvent.ACTION_UP)
+                        || (action == MotionEvent.ACTION_CANCEL)
                         || ((currX - mPrevX) * (currX - mPrevX) + (currY - mPrevY)
                                 * (currY - mPrevY) > 1000)) {
                     mPrevX = currX;
